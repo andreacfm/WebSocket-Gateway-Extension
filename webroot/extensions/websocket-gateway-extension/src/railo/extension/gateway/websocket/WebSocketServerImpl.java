@@ -4,10 +4,17 @@ import net.tootallnate.websocket.WebSocket;
 import net.tootallnate.websocket.WebSocketServer;
 
 public class WebSocketServerImpl extends WebSocketServer {
+	
+	private String _gatewayId;
+	
+    public WebSocketServerImpl(String port,String id) {
+		super(Integer.parseInt(port));
+    	_gatewayId = id;
+    }
 
 	@Override
 	public void onClientClose(WebSocket arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -19,7 +26,7 @@ public class WebSocketServerImpl extends WebSocketServer {
 
 	@Override
 	public void onClientOpen(WebSocket arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

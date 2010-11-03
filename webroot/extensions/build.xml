@@ -20,7 +20,7 @@
 
 	
 	<target name="updateExtension" depends="compressExtension">
-		<get src="http://localhost:8888/extensions/reload.cfm" dest="output/output.html" ignoreerrors="true" />
+		<get src="http://localhost:8888/extensions/reload.cfm" dest="output/output.html" ignoreerrors="false" />
 	</target>
 	
 	<target name="compressExtension" depends="replaceConfigVars">

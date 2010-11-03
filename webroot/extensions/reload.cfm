@@ -14,7 +14,7 @@
 <cfset providerWS =  CreateObject("webservice", "#rootURL#ExtensionProvider.cfc?wsdl")>
 <cfset pInfo = providerWS.getInfo()>
 
-<cfadmin 
+<!---<cfadmin 
 		action="updateExtension" 
 		type="server" 
 		password="#unames.config.server.password.XMLtext#"
@@ -35,7 +35,35 @@
 		mailinglist=""
 		network=""
 	    _type="#info.config.info.type.XMLtext#"
-/>		
-<!--- 
-<cfadmin action="restart" type="server" password="universe" />
- --->
+/>		--->
+
+	<cfscript>
+		variables.name = "WebSocketGateway";
+		variables.jar = "websocket-gateway.jar";
+		variables.driver = "WebSocketGateway.cfc";
+		variables.gateway = "WebSocket.cfc";
+		variables.jars = "#variables.jar#,WebSocket.jar,apache-logging-log4j.jar";
+		path = '/Users/andrea/dev/workspace/WebSocket-Gateway-Extension/webroot/extensions/websocket-gateway-extension/';
+	</cfscript>
+    
+        
+	<cfloop list="#variables.jars#" index="i">
+		<cfadmin 
+        	action="updateJar"
+        	type="server"
+        	password="#unames.config.server.password.XMLtext#"    
+        	jar="#path#lib/#i#">
+	</cfloop>   
+	
+	<cffile 
+	action="copy" 
+	source="#path#driver/#variables.driver#" 
+	destination="#expandPath('{railo-web}/context/admin/gdriver/')#/#variables.driver#"> 
+
+	<cffile 
+	action="copy" 
+	source="#path#railo/extension/gateway/#variables.gateway#" 
+	destination="#expandPath('{railo-web}/gateway/railo/extension/gateway/')#/#variables.gateway#"> 
+
+
+<cfadmin action="restart" type="server" password="#unames.config.server.password.XMLtext#" />

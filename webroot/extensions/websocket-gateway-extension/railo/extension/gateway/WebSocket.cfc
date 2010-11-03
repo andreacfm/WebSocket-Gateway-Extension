@@ -17,35 +17,40 @@
 
 
 	<cffunction name="start" access="public" output="no" returntype="void">
-		<cfset systemOutput("start",true)>
+		<cflog text="Starting websocket server on port #variables.config.port#" type="information" file="WebSocket"> 
         <cftry>
         	<cfset state="starting">
-            <cfset sleep(1000)>
-			...
+			
+			<cfset variables.server = createObject('java','railo.extension.gateway.websocket.WebSocketServerImpl').init(variables.config.port)>
+			<cfset variables.server.start()>
+						
          	<cfset state="running">
         	<cfcatch>
             	 <cfset state="failed">
+            	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocket">
                  <cfrethrow>
             </cfcatch>
         </cftry>
 	</cffunction>
 
 	<cffunction name="stop" access="public" output="no" returntype="void">
-		<cfset systemOutput("stop",true)>
+		<cflog text="Stopping websocket server on port #variables.config.port#" type="information" file="WebSocket"> 
         <cftry>
         	<cfset state="stopping">
-            <cfset sleep(1000)>
-			...
+			
+			<cfset variables.server.stop()>
+						
          	<cfset state="stopped">
         	<cfcatch>
             	 <cfset state="failed">
+            	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocket">
                  <cfrethrow>
             </cfcatch>
         </cftry>
 	</cffunction>
 
 	<cffunction name="restart" access="public" output="no" returntype="void">
-		<cfset systemOutput("restart",true)>
+		<cflog text="Restarting websocket server on port #variables.config.port#" type="information" file="WebSocket"> 
         <cfif state EQ "running"><cfset stop()></cfif>
 		<cfset start()>
 	</cffunction>

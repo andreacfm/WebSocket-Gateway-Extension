@@ -1,12 +1,7 @@
 <cfcomponent extends="Gateway">
 
     <cfset fields=array(
-		displayName="Server Port",
-		name="port",
-		defaultValue=10125,
-		required=true,
-		description="Port of the websocket server",
-		type="text"
+		field("Server Port","port","10125",true,"Port of the websocket server","text")
 	)>
 
 	<cffunction name="getClass" returntype="string">
