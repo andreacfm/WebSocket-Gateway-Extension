@@ -67,11 +67,53 @@
         <cfreturn state>
 	</cffunction>
 
+	<cffunction name="getServer" access="public" output="no" returntype="any">
+        <cfreturn variables.server>
+	</cffunction>
+
 	<cffunction name="sendMessage" access="public" output="no" returntype="string">
 		<cfargument name="data" required="false" type="struct">
 		
-        <cfset systemOutput("sendMessage:",true)>
-        <cfset systemOutput("- data:"&serialize(data),true)>
+		<!--- look for a webSocketServerAction (that comes from socket server) --->
+		<cfif structKeyExists(data,"webSocketServerAction")>
+			
+			<cfswitch expression="#data.webSocketServerAction#">
+
+				<cfcase value="onClientOpen">				
+					<cfif len(config.onClientOpen)>
+						<cfset variables.listener[config.onClientOpen](data,this) >
+					</cfif>
+				</cfcase>
+				
+				<cfcase value="onClientClose">				
+					<cfif len(config.onClientClose)>
+						<cfset variables.listener[config.onClientClose](data,this) >
+					</cfif>
+				</cfcase>
+				
+				<cfcase value="onMessage">				
+					<cfif len(config.onMessage)>
+						<cfset variables.listener[config.onMessage](data,this) >
+					</cfif>
+				</cfcase>
+				
+			</cfswitch>
+			
+			<cfreturn>
+		</cfif>
+		
+		<!--- if we get here we are sending message from sendGatewayMessage --->
+		<!--- 
+		if data.connections.length == 0 >>>> send to all
+		else send to the passed connections
+		 --->
+		<cfif not structkeyExists(data,'connections') or not isarray(data.connections)>
+			<cfset data.connections = []>
+		</cfif>
+		<!--- throw and log if message is not provided ---> 
+		<cfset variables.server.send(data.connections,data.message)>
+		
+		
 	</cffunction>
 
 </cfcomponent>
