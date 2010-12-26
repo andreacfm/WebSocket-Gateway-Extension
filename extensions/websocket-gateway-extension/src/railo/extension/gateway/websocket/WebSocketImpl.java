@@ -10,7 +10,7 @@ public class WebSocketImpl{
 
     public WebSocketImpl(WebSocket ws,String type,String message) {
         _WebSockets = ws;
-        set_message(message);
+        setMessage(message);
     }
 
     public WebSocket getWebSocket() {
@@ -21,7 +21,7 @@ public class WebSocketImpl{
         return _type;
     }
 
-    public void set_message(String message) {
+    public void setMessage(String message) {
         this._message = _message;
     }
 

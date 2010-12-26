@@ -5,14 +5,14 @@
         <cfset info.title="Local Extension Provider ("&cgi.HTTP_HOST&")">
         <cfset info.mode="develop">
         <cfset info.description="Andrea Campolonghi personal development extensions">
-        <cfset info.image="http://localhost:8888/extensions/logo.jpg">
+        <cfset info.image="">
         <cfset info.url="http://" & cgi.HTTP_HOST>
     	<cfreturn info>
     </cffunction>
              
     <cffunction name="listApplications" access="remote" returntype="query">
 		<cfset var apps=queryNew('type,id,name,label,description,version,category,image,download,paypal,author,codename,video,support,documentation,forum,mailinglist,network,created')>
-            <cfset populateCOM(apps)>
+        <cfset populateCOM(apps)>
         <cfreturn apps>
     </cffunction>    
     

@@ -3,6 +3,7 @@
 /extensions/ext/*.zip
 /extensions/output/*.*
 /extensions/unames.xml
+/extensions/websocket-gateway-extension/bin
 
 #extensions
 *.project
@@ -12,3 +13,4 @@
 /.settings
 *.iml
 /.idea
+/railo

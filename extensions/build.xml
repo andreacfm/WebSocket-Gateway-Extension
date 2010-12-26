@@ -12,17 +12,21 @@
 		<format property="TSTAMP" pattern="HH:mm" locale="en,UK"/>
 	</tstamp>
 	
-	
-	<!-- Upload Extension to the local webserver -->
-	<target name="uploadExtension" depends="compressExtension">
-	
+
+	<target name="updateExtension" depends="uploadExtension">
+		<get src="http://localhost:8080/railo/reload.cfm" dest="output/output.html" ignoreerrors="false" />
 	</target>
 
-	
-	<target name="updateExtension" depends="compressExtension">
-		<get src="http://localhost:8888/extensions/reload.cfm" dest="output/output.html" ignoreerrors="false" />
-	</target>
-	
+    <target name="uploadExtension" depends="compressExtension">
+        <copy todir="../railo/" overwrite="true">
+            <fileset dir="${basedir}" includes="*cfc,*cfm,*xml"/>
+        </copy>
+        <mkdir dir="../railo/ext"/>
+        <copy todir="../railo/ext" overwrite="true">
+            <fileset dir="${basedir}/ext" includes="**"/>
+        </copy>
+    </target>
+
 	<target name="compressExtension" depends="replaceConfigVars">
 		<zip destfile="ext/websocket-gateway.zip" basedir="${project.extPath}">
 			<exclude name="**/src/**"/>
@@ -45,9 +49,6 @@
 	
 	<target name="createJar" depends="deleteArchives">
 		<path id="master-classpath">
-			<fileset dir="../../lib/railo-server/patches/">
-				<include name="*.rc"/>
-			 </fileset>
 			<fileset dir="../../lib">
 				<include name="*.jar"/>
 			 </fileset>
@@ -55,10 +56,10 @@
 			    <include name="*.jar"/>
 			  </fileset>	
 		</path>
-		<javac srcdir="${project.extPath}/src">
+		<javac srcdir="${project.extPath}/src" destdir="${project.extPath}/bin">
 			 <classpath refid="master-classpath"/>
 		</javac>
-		<jar basedir="${project.extPath}/src" destfile="${project.extPath}/lib/websocket-gateway.jar" />
+		<jar basedir="${project.extPath}/bin" destfile="${project.extPath}/lib/websocket-gateway.jar" />
 	</target>
 	
 	<target name="deleteArchives">
