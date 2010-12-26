@@ -11,13 +11,13 @@
         <cfset variables.config=config>
         <cfset variables.listener=listener>
         
-        <cflog text="WebSocket Gateway [#arguments.id#] initialized" type="information" file="WebSocket">
+        <cflog text="WebSocketImpl Gateway [#arguments.id#] initialized" type="information" file="WebSocketImpl">
     
 	</cffunction>
 
 
 	<cffunction name="start" access="public" output="no" returntype="void">
-		<cflog text="Starting websocket server on port #variables.config.port#" type="information" file="WebSocket"> 
+		<cflog text="Starting websocket server on port #variables.config.port#" type="information" file="WebSocketImpl">
         <cftry>
         	<cfset state="starting">
 			
@@ -25,34 +25,34 @@
 			<cfset variables.server.start()>
 						
          	<cfset state="running">
-         	<cflog text="Started websocket server on port #variables.config.port#" type="information" file="WebSocket"> 
+         	<cflog text="Started websocket server on port #variables.config.port#" type="information" file="WebSocketImpl">
         	<cfcatch>
             	 <cfset state="failed">
-            	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocket">
+            	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocketImpl">
                  <cfrethrow>
             </cfcatch>
         </cftry>
 	</cffunction>
 
 	<cffunction name="stop" access="public" output="no" returntype="void">
-		<cflog text="Stopping websocket server on port #variables.config.port#" type="information" file="WebSocket"> 
+		<cflog text="Stopping websocket server on port #variables.config.port#" type="information" file="WebSocketImpl">
         <cftry>
         	<cfset state="stopping">
 			
 			<cfset variables.server.stop()>
 						
          	<cfset state="stopped">
-         	<cflog text="Stopped websocket server on port #variables.config.port#" type="information" file="WebSocket"> 
+         	<cflog text="Stopped websocket server on port #variables.config.port#" type="information" file="WebSocketImpl">
         	<cfcatch>
             	 <cfset state="failed">
-            	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocket">
+            	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocketImpl">
                  <cfrethrow>
             </cfcatch>
         </cftry>
 	</cffunction>
 
 	<cffunction name="restart" access="public" output="no" returntype="void">
-		<cflog text="Restarting websocket server on port #variables.config.port#" type="information" file="WebSocket"> 
+		<cflog text="Restarting websocket server on port #variables.config.port#" type="information" file="WebSocketImpl">
         <cfif state EQ "running"><cfset stop()></cfif>
 		<cfset start()>
 	</cffunction>

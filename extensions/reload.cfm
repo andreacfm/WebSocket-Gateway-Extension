@@ -41,9 +41,9 @@
 		variables.name = "WebSocketGateway";
 		variables.jar = "websocket-gateway.jar";
 		variables.driver = "WebSocketGateway.cfc";
-		variables.gateway = "WebSocket.cfc";
-		variables.jars = "#variables.jar#,WebSocket.jar,apache-logging-log4j.jar";
-		path = '/Users/andrea/dev/workspace/WebSocket-Gateway-Extension/webroot/extensions/websocket-gateway-extension/';
+		variables.gateway = "WebSocketImpl.cfc";
+		variables.jars = "#variables.jar#,WebSocketImpl.jar,apache-logging-log4j.jar";
+		path = '/Users/andrea/dev/workspace/WebSocketImpl-Gateway-Extension/webroot/extensions/websocket-gateway-extension/';
 	</cfscript>
     
         

@@ -98,7 +98,7 @@
       }
     });
 
-    //console.log("[WebSocket] Flash object is ready");
+    //console.log("[WebSocketImpl] Flash object is ready");
   };
 
   WebSocket.prototype.send = function(data) {
@@ -300,7 +300,7 @@
       window.WEB_SOCKET_SWF_LOCATION = WebSocket.__swfLocation;
     }
     if (!window.WEB_SOCKET_SWF_LOCATION) {
-      console.error("[WebSocket] set WEB_SOCKET_SWF_LOCATION to location of WebSocketMain.swf");
+      console.error("[WebSocketImpl] set WEB_SOCKET_SWF_LOCATION to location of WebSocketMain.swf");
       return;
     }
     var container = document.createElement("div");
@@ -318,12 +318,12 @@
       WEB_SOCKET_SWF_LOCATION, "webSocketFlash", "8", "8", "9.0.0",
       null, {bridgeName: "webSocket"}, null, null,
       function(e) {
-        if (!e.success) console.error("[WebSocket] swfobject.embedSWF failed");
+        if (!e.success) console.error("[WebSocketImpl] swfobject.embedSWF failed");
       }
     );
     FABridge.addInitializationCallback("webSocket", function() {
       try {
-        //console.log("[WebSocket] FABridge initializad");
+        //console.log("[WebSocketImpl] FABridge initializad");
         WebSocket.__flash = FABridge.webSocket.root();
         WebSocket.__flash.setCallerUrl(location.href);
         WebSocket.__flash.setDebug(!!window.WEB_SOCKET_DEBUG);
@@ -332,7 +332,7 @@
         }
         WebSocket.__tasks = [];
       } catch (e) {
-        console.error("[WebSocket] " + e.toString());
+        console.error("[WebSocketImpl] " + e.toString());
       }
     });
   };

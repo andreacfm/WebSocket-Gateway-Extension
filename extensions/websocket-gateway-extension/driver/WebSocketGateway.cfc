@@ -14,11 +14,11 @@
     </cffunction>
 	
 	<cffunction name="getCFCPath" returntype="string">
-    	<cfreturn "railo.extension.gateway.WebSocket">
+    	<cfreturn "railo.extension.gateway.WebSocketImpl">
     </cffunction>
     
 	<cffunction name="getLabel" returntype="string" output="no">
-    	<cfreturn "WebSocket Gateway">
+    	<cfreturn "WebSocketImpl Gateway">
     </cffunction>
 	
 	<cffunction name="getDescription" returntype="string" output="no">
