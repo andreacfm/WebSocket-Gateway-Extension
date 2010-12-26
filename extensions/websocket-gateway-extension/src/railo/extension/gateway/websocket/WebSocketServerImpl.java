@@ -46,10 +46,11 @@ public class WebSocketServerImpl extends WebSocketServer {
 	 * @param text
 	 * @throws IOException
 	 */
-	  public void sendToAllExcept(ArrayList conns, String text) throws IOException {
-		  Iterator<WebSocket> it = conns.iterator();
+	  public void sendToAllExcept(ArrayList<WebSocketImpl> conns, String text) throws IOException {
+		  Iterator<WebSocketImpl> it = conns.iterator();
 		  while(it.hasNext()){
-			  it.next().send(text);	
+              WebSocketImpl ws = it.next();
+			  ws.getWebSocket().send(ws.getMessage());
 		  }
 
 	  }
