@@ -4,14 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import railo.loader.engine.CFMLEngine;
-import railo.loader.engine.CFMLEngineFactory;
-import railo.runtime.PageContext;
-import railo.runtime.config.ConfigImpl;
-import railo.runtime.exp.PageException;
-import railo.runtime.type.Array;
-import railo.runtime.type.Struct;
-
 import net.tootallnate.websocket.WebSocket;
 import net.tootallnate.websocket.WebSocketServer;
 
@@ -27,25 +19,12 @@ public class WebSocketServerImpl extends WebSocketServer {
 	@Override
 	public void onClientOpen(WebSocket conn) {
 
-		try{
-
-			CFMLEngine engine = CFMLEngineFactory.getInstance();
-			PageContext pc = engine.getThreadPageContext();
-			
-			Struct data = engine.getCreationUtil().createStruct();
-			
-			data.set("webSocketServerAction", "onClientOpen");
-			data.set("connection",conn);
-		
-			ConfigImpl conf = (ConfigImpl)pc.getConfig();
-			conf.getGatewayEngine().sendMessage(_gatewayID,data);
-           
-		}catch(PageException e){
-			e.printStackTrace();
-		}catch (IOException ex) {
+        try {
+            this.sendToAll(conn + " connected;");
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
-        System.out.println(conn + " is now connected;");
+        System.out.println(conn + " connetted");
 	}
 
 	@Override
@@ -70,7 +49,7 @@ public class WebSocketServerImpl extends WebSocketServer {
 	 * @param text
 	 * @throws IOException
 	 */
-	  public void sendToAllExcept(Array conns, String text) throws IOException {
+	  public void sendToAllExcept(ArrayList conns, String text) throws IOException {
 		  Iterator<WebSocket> it = conns.iterator();
 		  while(it.hasNext()){
 			  it.next().send(text);	

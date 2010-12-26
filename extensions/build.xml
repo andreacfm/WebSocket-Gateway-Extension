@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="WebSocketGatewayBuilder" basedir="." default="updateExtension">
+<project name="WebSocketGatewayBuilder" basedir="" default="updateExtension">
 
 	<!-- project properties -->
 	<property file="project.properties"/>
