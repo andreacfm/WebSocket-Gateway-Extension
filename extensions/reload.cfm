@@ -1,4 +1,5 @@
 <!--- Parameters --->
+<!---
 <cfset rootURL="http://#CGI.server_name#:#CGI.server_port#/railo/">
 <cfset root="">
 <cfset zipFileLocation = 'ext/websocket-gateway.zip'>
@@ -15,15 +16,15 @@
 <cfset pInfo = providerWS.getInfo()>
 
 <cfadmin
-		action="updateExtension" 
-		type="server" 
+		action="updateExtension"
+		type="server"
 		password="#unames.config.server.password.XMLtext#"
 		provider="#rootURL#ExtensionProvider.cfc"
 		id="#info.config.info.id.XMLtext#"
-		version="#info.config.info.version.XMLtext#" 
-		name="#info.config.info.version.XMLtext#" 
+		version="#info.config.info.version.XMLtext#"
+		name="#info.config.info.version.XMLtext#"
 		label="#info.config.info.label.XMLtext#"
-		description="#info.config.info.version.XMLtext#" 
+		description="#info.config.info.version.XMLtext#"
 		category="#info.config.info.category.XMLtext#"
 		author="#info.config.info.author.XMLtext#"
 		codename="#info.config.info.version.XMLtext#"
@@ -36,5 +37,6 @@
 		network=""
 	    _type="#info.config.info.type.XMLtext#"
 />
+--->
 
 <cfadmin action="restart" type="server" password="#unames.config.server.password.XMLtext#" />

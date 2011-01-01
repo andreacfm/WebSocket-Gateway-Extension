@@ -11,11 +11,43 @@
 		<format property="TODAY" pattern="yyyy-MMMM-d" locale="en,UK"/>
 		<format property="TSTAMP" pattern="HH:mm" locale="en,UK"/>
 	</tstamp>
-	
+
 
 	<target name="updateExtension" depends="uploadExtension">
-		<get src="http://localhost:8080/railo/reload.cfm" dest="output/output.html" ignoreerrors="false" />
+		<!--<get src="http://localhost:8080/railo/reload.cfm" dest="output/output.html" ignoreerrors="false" />-->
+
+        <echo message="Deploying new lib"/>
+        <copy todir="${context_path}/lib" overwrite="true">
+            <fileset dir="${project.extPath}/lib" includes="*jar"/>
+        </copy>
+
+        <echo message="Deploying new driver"/>
+        <copy todir="${context_path}/context/admin/gdriver/" overwrite="true">
+            <fileset dir="${project.extPath}/driver" includes="*cfc"/>
+        </copy>
+
+        <echo message="Deploying Gateway"/>
+        <copy todir="${context_path}/gateway/railo/extension/gateway" overwrite="true">
+            <fileset dir="${project.extPath}/railo/extension/gateway" includes="*cfc"/>
+        </copy>
+
+        <echo message="restart railo"/>
+        <get
+             src="http://${server.name}:${server.port}/railo/railo_restart.cfm?admin_password=${admin.password}"
+             dest="output/restart_output.txt"/>
+
+        <loadfile property="restart.status" srcFile="output/restart_output.txt"/>
+        <echo message="Restart status: ${restart.status}"/>
+        <delete file="ouptput/restart_output.txt"/>
+
 	</target>
+
+    <target name="deploy_examples" depends="uploadExtension">
+        <mkdir dir="../railo/example"/>
+        <copy todir="../railo/example" overwrite="true">
+            <fileset dir="../example" includes="*"/>
+        </copy>
+    </target>
 
     <target name="uploadExtension" depends="compressExtension">
         <copy todir="../railo/" overwrite="true">
