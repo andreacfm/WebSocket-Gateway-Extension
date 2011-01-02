@@ -22,7 +22,7 @@ public class WebSocketImpl{
     }
 
     public void setMessage(String message) {
-        this._message = _message;
+        _message = message;
     }
 
     public String getMessage() {

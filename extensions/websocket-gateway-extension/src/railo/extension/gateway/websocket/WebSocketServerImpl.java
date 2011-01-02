@@ -25,34 +25,41 @@ public class WebSocketServerImpl extends WebSocketServer {
 	@Override
 	public void onClientOpen(WebSocket conn) {
         WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_OPEN,"Connected");
-        System.out.println(ws.toString());
         _connectionsStack.add(ws);
+        System.out.println(_connectionsStack.size());
 	}
 
 	@Override
 	public void onClientClose(WebSocket conn) {
         WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_ClOSE,"Disconnetted");
-        System.out.println(ws.toString());
         _connectionsStack.add(ws);
+        System.out.println(_connectionsStack.size());
 	}
 
 	@Override
 	public void onClientMessage(WebSocket conn, String message) {
         WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_MESSAGE,message);
-        System.out.println(ws.toString());
         _connectionsStack.add(ws);
+        System.out.println(_connectionsStack.size());
+
 	}
 
-	/**
+
+    @Override
+    public void sendToAll(String s) throws IOException {
+        super.sendToAll(s);
+    }
+
+    /**
 	 *  Sends <var>text</var> to the passed clients if they exists.
 	 * @param conns
 	 * @param text
 	 * @throws IOException
 	 */
-	  public void sendToAllExcept(ArrayList<WebSocketImpl> conns, String text) throws IOException {
-		  Iterator<WebSocketImpl> it = conns.iterator();
+	  public void send(ArrayList conns, String text) throws IOException {
+		  Iterator it = conns.iterator();
 		  while(it.hasNext()){
-              WebSocketImpl ws = it.next();
+              WebSocketImpl ws = (WebSocketImpl)it.next();
 			  ws.getWebSocket().send(ws.getMessage());
 		  }
 

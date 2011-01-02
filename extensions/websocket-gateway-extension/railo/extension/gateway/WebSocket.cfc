@@ -23,10 +23,10 @@
 
 			<cfset variables.server = createObject('java','railo.extension.gateway.websocket.WebSocketServerImpl').init(variables.config.port,variables.id)>
 			<cfset variables.server.start()>
-			<cfset startFetcherThread()/>
-
          	<cfset state="running">
          	<cflog text="Started websocket server on port #variables.config.port#" type="information" file="WebSocket">
+			<cfset startFetcherThread()/>
+
         	<cfcatch>
             	 <cfset state="failed">
             	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocket">
@@ -75,32 +75,32 @@
         <cftry>
 
             <!--- look for a webSocketServerAction (that comes from socket server) --->
-            <cfif structKeyExists(data,"webSocketServerAction")>
-
-                <cfswitch expression="#data.webSocketServerAction#">
-
-                    <cfcase value="onClientOpen">
-                        <cfif len(config.onClientOpen)>
-                            <cfset variables.listener[config.onClientOpen](data,this) >
-                        </cfif>
-                    </cfcase>
-
-                    <cfcase value="onClientClose">
-                        <cfif len(config.onClientClose)>
-                            <cfset variables.listener[config.onClientClose](data,this) >
-                        </cfif>
-                    </cfcase>
-
-                    <cfcase value="onMessage">
-                        <cfif len(config.onMessage)>
-                            <cfset variables.listener[config.onMessage](data,this) >
-                        </cfif>
-                    </cfcase>
-
-                </cfswitch>
-
-                <cfreturn>
-            </cfif>
+<!---            <cfif structKeyExists(data,"webSocketServerAction")>--->
+<!------>
+<!---                <cfswitch expression="#data.webSocketServerAction#">--->
+<!------>
+<!---                    <cfcase value="onClientOpen">--->
+<!---                        <cfif len(config.onClientOpen)>--->
+<!---                            <cfset variables.listener[config.onClientOpen](data,this) >--->
+<!---                        </cfif>--->
+<!---                    </cfcase>--->
+<!------>
+<!---                    <cfcase value="onClientClose">--->
+<!---                        <cfif len(config.onClientClose)>--->
+<!---                            <cfset variables.listener[config.onClientClose](data,this) >--->
+<!---                        </cfif>--->
+<!---                    </cfcase>--->
+<!------>
+<!---                    <cfcase value="onMessage">--->
+<!---                        <cfif len(config.onMessage)>--->
+<!---                            <cfset variables.listener[config.onMessage](data,this) >--->
+<!---                        </cfif>--->
+<!---                    </cfcase>--->
+<!------>
+<!---                </cfswitch>--->
+<!------>
+<!---                <cfreturn>--->
+<!---            </cfif>--->
 
             <!--- if we get here we are sending message from sendGatewayMessage --->
             <!---
@@ -108,10 +108,12 @@
             else send to the passed connections
              --->
             <cfif not structkeyExists(data,'connections') or not isarray(data.connections)>
-                <cfset data.connections = []>
+                <cflog file="WebSockect" text="send to all #data.message# "/>
+                <cfset variables.server.sendToAll(data.message)>
+            <cfelse>
+                <!--- send only to the provided connections --->
+                <cfset variables.server.send(data.connections,data.message)>
             </cfif>
-            <!--- throw and log if message is not provided --->
-            <cfset variables.server.send(data.connections,data.message)>
 
             <cfcatch type="any">
                 <cflog type="error" text="#cfcatch.message#" file="WebSocket"/>
@@ -125,16 +127,20 @@
 
     <cffunction name="startFetcherThread" access="private" output="false" hint="start the thread that will fetch and process incoming connections">
 
-        <cfthread name="_webSocketFetcherThread_#variables.id#" action="run">
+        <cflog type="information" text="WebSocket Gateway starting fetching messages thread" file="WebSocket"/>
+
+        <cfthread name="_webSocketFetcherThread_#variables.id#" action="run" context="#this#">
             <cftry>
-                <cfset conns = variables.server.getConnectionsStack()>
-                <cfloop array="#conns#" index="conn">
-                    <cflog type="information" text="Getting sockect" file="WebSocket"/>
-                    <cfset data = {conn : conn, webSocketServerAction : conn.getType, message : conn.getMessage()}>
-                    <cfset sendMessage(data)>
-                    <!--- remove the connection from the queue --->
-                    <cfset conns.remove(conn)>
-                    <cfset sleep(500)>
+                <cfloop condition="true">
+                    <cfset conns = attributes.context.getServer().getConnectionsStack()>
+                    <cflog type="information" text="Fetched #conns.size()# messages" file="WebSocket"/>
+                    <cfloop array="#conns#" index="conn">
+                        <cfset var data = {conn : conn, webSocketServerAction : conn.getType(), message : conn.getMessage()}>
+                        <cfset attributes.context.sendMessage(data)>
+                        <!--- remove the connection from the queue --->
+                        <cfset conns.remove(conn)>
+                    </cfloop>
+                    <cfset sleep(1000)>
                 </cfloop>
 
                 <cfcatch type="any">
