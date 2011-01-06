@@ -23,17 +23,16 @@
                 ws = new WebSocket(uri);
 
                 ws.onopen = function() {
-                    log("[WebSocket#onopen]\n");
 					$('#connect').attr("disabled","disabled");
 					$('#disconnect').attr("disabled","");
                 }
 
                 ws.onmessage = function(e) {
-                    log("[WebSocket#onmessage] Message: '" + e.data + "'\n");
+                    console.log(e);
+                    log( e.data + "\n");
                 }
 
                 ws.onclose = function() {
-                    log("[WebSocket#onclose]\n");
                     ws = null;
                 }
             });
@@ -49,7 +48,7 @@
 
             $("#send").click(function(e) {
                 e.preventDefault();
-                var msg = $('#msg').text;
+                var msg = $('#msg').val();
                 ws.send(msg);
             });
 

@@ -26,7 +26,6 @@ public class WebSocketServerImpl extends WebSocketServer {
 	public void onClientOpen(WebSocket conn) {
         WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_OPEN,"Connected");
         _connectionsStack.add(ws);
-        System.out.println(_connectionsStack.size());
 	}
 
 	@Override
@@ -47,6 +46,7 @@ public class WebSocketServerImpl extends WebSocketServer {
 
     @Override
     public void sendToAll(String s) throws IOException {
+        System.out.println("sending " +  s);
         super.sendToAll(s);
     }
 
