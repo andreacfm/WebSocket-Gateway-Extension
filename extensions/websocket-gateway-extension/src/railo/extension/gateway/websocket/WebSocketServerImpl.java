@@ -32,21 +32,18 @@ public class WebSocketServerImpl extends WebSocketServer {
 	public void onClientClose(WebSocket conn) {
         WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_ClOSE,"Disconnetted");
         _connectionsStack.add(ws);
-        System.out.println(_connectionsStack.size());
 	}
 
 	@Override
 	public void onClientMessage(WebSocket conn, String message) {
         WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_MESSAGE,message);
         _connectionsStack.add(ws);
-        System.out.println(_connectionsStack.size());
 
 	}
 
 
     @Override
     public void sendToAll(String s) throws IOException {
-        System.out.println("sending " +  s);
         super.sendToAll(s);
     }
 
