@@ -74,35 +74,41 @@
 
         <cftry>
 
-            <!--- look for a webSocketServerAction (that comes from socket server) --->
-<!---            <cfif structKeyExists(data,"webSocketServerAction")>--->
-<!------>
-<!---                <cfswitch expression="#data.webSocketServerAction#">--->
-<!------>
-<!---                    <cfcase value="onClientOpen">--->
-<!---                        <cfif len(config.onClientOpen)>--->
-<!---                            <cfset variables.listener[config.onClientOpen](data,this) >--->
-<!---                        </cfif>--->
-<!---                    </cfcase>--->
-<!------>
-<!---                    <cfcase value="onClientClose">--->
-<!---                        <cfif len(config.onClientClose)>--->
-<!---                            <cfset variables.listener[config.onClientClose](data,this) >--->
-<!---                        </cfif>--->
-<!---                    </cfcase>--->
-<!------>
-<!---                    <cfcase value="onMessage">--->
-<!---                        <cfif len(config.onMessage)>--->
-<!---                            <cfset variables.listener[config.onMessage](data,this) >--->
-<!---                        </cfif>--->
-<!---                    </cfcase>--->
-<!------>
-<!---                </cfswitch>--->
-<!------>
-<!---                <cfreturn>--->
-<!---            </cfif>--->
+            <cfif structKeyExists(data,"webSocketServerAction")>
 
-            <!--- if we get here we are sending message from sendGatewayMessage --->
+                <!--- look for a webSocketServerAction (that comes from socket server)--->
+                <cfswitch expression="#data.webSocketServerAction#">
+
+                    <cfcase value="onClientOpen">
+                        <cfif len(config.onClientOpen)>
+                            <cfset variables.listener[config.onClientOpen](data) >
+                        </cfif>
+                    </cfcase>
+
+                    <cfcase value="onClientClose">
+                        <cfif len(config.onClientClose)>
+                            <cfset variables.listener[config.onClientClose](data) >
+                        </cfif>
+                    </cfcase>
+
+                    <cfcase value="onMessage">
+                        <cfif len(config.onMessage)>
+                            <cfset variables.listener[config.onMessage](data) >
+                        </cfif>
+                    </cfcase>
+
+                </cfswitch>
+
+            <!---
+            If we get here we are sending message from sendGatewayMessage
+            Treat as any incoming message
+            --->
+            <cfelse>
+                <cfif len(config.onMessage)>
+                    <cfset variables.listener[config.onMessage](data) >
+                </cfif>
+            </cfif>
+
             <!---
             if data.connections.length == 0 >>>> send to all
             else send to the passed connections
