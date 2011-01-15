@@ -79,16 +79,20 @@
                 <!--- look for a webSocketServerAction (that comes from socket server)--->
                 <cfswitch expression="#data.webSocketServerAction#">
 
+                    <!--- Hook for open event . Does not send any message--->
                     <cfcase value="onClientOpen">
                         <cfif len(config.onClientOpen)>
                             <cfset variables.listener[config.onClientOpen](data) >
                         </cfif>
+                        <cfreturn>
                     </cfcase>
 
+                    <!--- Hook for close event . Does not send any message--->
                     <cfcase value="onClientClose">
                         <cfif len(config.onClientClose)>
                             <cfset variables.listener[config.onClientClose](data) >
                         </cfif>
+                        <cfreturn>
                     </cfcase>
 
                     <cfcase value="onMessage">

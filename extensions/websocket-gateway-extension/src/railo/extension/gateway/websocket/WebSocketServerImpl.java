@@ -24,13 +24,13 @@ public class WebSocketServerImpl extends WebSocketServer {
 
 	@Override
 	public void onClientOpen(WebSocket conn) {
-        WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_OPEN,"Connected");
+        WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_OPEN,"");
         _connectionsStack.add(ws);
 	}
 
 	@Override
 	public void onClientClose(WebSocket conn) {
-        WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_ClOSE,"Disconnetted");
+        WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_ClOSE,"");
         _connectionsStack.add(ws);
 	}
 
