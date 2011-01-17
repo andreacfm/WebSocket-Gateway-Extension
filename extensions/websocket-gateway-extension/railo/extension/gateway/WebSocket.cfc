@@ -41,6 +41,7 @@
         	<cfset state="stopping">
 
 			<cfset variables.server.stop()>
+            <cfset stopFetcherThread()>
 
          	<cfset state="stopped">
          	<cflog text="Stopped websocket server on port #variables.config.port#" type="information" file="WebSocket">
@@ -117,9 +118,12 @@
             if data.connections.length == 0 >>>> send to all
             else send to the passed connections
              --->
-            <cfif not structkeyExists(data,'connections') or not isarray(data.connections)>
+            <cfif not structKeyExists(data,'except') and (not structkeyExists(data,'connections') or not isarray(data.connections))>
                 <cflog file="WebSockect" text="send to all #data.message# "/>
                 <cfset variables.server.sendToAll(data.message)>
+                <!---send to all connections except top the one passed--->
+            <cfelseif structKeyExists(data,'except')>
+                <cfset variables.server.sendToAllExcept(data.except,data.message)>
             <cfelse>
                 <!--- send only to the provided connections --->
                 <cfset variables.server.send(data.connections,data.message)>
@@ -143,18 +147,18 @@
             <cftry>
                 <cfloop condition="true">
                     <cfset conns = attributes.context.getServer().getConnectionsStack()>
-                    <cflog type="information" text="Fetched #conns.size()# messages" file="WebSocket"/>
                     <cfloop array="#conns#" index="conn">
                         <cfset var data = {conn : conn, webSocketServerAction : conn.getType(), message : conn.getMessage()}>
                         <cfset attributes.context.sendMessage(data)>
-                        <!--- remove the connection from the queue --->
-                        <cfset conns.remove(conn)>
                     </cfloop>
+                    <!--- remove the processed connections --->
+                    <cfset conns.clear()>
                     <cfset sleep(1000)>
                 </cfloop>
 
                 <cfcatch type="any">
-                    <cflog type="error" text="#cfcatch.message#" file="WebSocket"/>
+                    <cflog type="error" text="fecthing thread : #cfcatch.message#" file="WebSocket"/>
+                    <cfrethrow>
                 </cfcatch>
             </cftry>
         </cfthread>

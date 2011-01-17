@@ -48,6 +48,16 @@ public class WebSocketServerImpl extends WebSocketServer {
     }
 
     /**
+     * Send to all the connections except the one passed
+     * @param webSocket
+     * @param message
+     * @throws IOException
+     */
+    public void sendToAllExcept(WebSocketImpl webSocket, String message) throws IOException {
+        super.sendToAllExcept(webSocket.getWebSocket(), message);
+    }
+
+    /**
 	 *  Sends <var>text</var> to the passed clients if they exists.
 	 * @param conns
 	 * @param text
