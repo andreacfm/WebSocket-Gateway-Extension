@@ -114,20 +114,23 @@
                 </cfif>
             </cfif>
 
-            <!---
-            if data.connections.length == 0 >>>> send to all
-            else send to the passed connections
-             --->
-            <cfif not structKeyExists(data,'except') and (not structkeyExists(data,'connections') or not isarray(data.connections))>
-                <cflog file="WebSockect" text="send to all #data.message# "/>
-                <cfset variables.server.sendToAll(data.message)>
-                <!---send to all connections except top the one passed--->
-            <cfelseif structKeyExists(data,'except')>
-                <cfset variables.server.sendToAllExcept(data.except,data.message)>
-            <cfelse>
-                <!--- send only to the provided connections --->
+
+            <!--- send only to the provided connections --->
+            <cfif structkeyExists(data,'connections') and isarray(data.connections)>
                 <cfset variables.server.send(data.connections,data.message)>
+
+            <!---
+            No set of connections exists. If also no webSocketServerAction and conn exists means invocation comes from sengGatewayMessage
+            so send to all.
+            --->
+            <cfelseif not structKeyExists(data,'conn') and not structKeyExists(data,"webSocketServerAction")>
+                <cfset variables.server.sendToAll(data.message)>
+
+            <!--- By deafult send to all except the connection that sent the message --->
+            <cfelse>
+                <cfset variables.server.sendToAllExcept(data.conn,data.message)>
             </cfif>
+
 
             <cfcatch type="any">
                 <cflog type="error" text="#cfcatch.message#" file="WebSocket"/>
