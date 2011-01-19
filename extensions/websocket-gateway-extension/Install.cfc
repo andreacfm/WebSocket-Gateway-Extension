@@ -3,6 +3,7 @@
 	<cfscript>
 		variables.name = "WebSocketGateway";
 		variables.driver = "WebSocketGateway.cfc";
+		variables.listener = "WebSocketListener.cfc";
 		variables.gateway = "WebSocket.cfc";
 		variables.jars = "websocket-gateway.jar,WebSocket.jar";
 	</cfscript>
@@ -39,6 +40,11 @@
 		source="#path#railo/extension/gateway/#variables.gateway#"
 		destination="#getContextPath()#/gateway/railo/extension/gateway/#variables.gateway#">
 
+		<cffile
+		action="copy"
+		source="#path#railo/extension/gateway/#variables.listener#"
+		destination="#getContextPath()#/gateway/railo/extension/gateway/#variables.listener#">
+
         <cfreturn '#variables.name# is now successfully installed'>
 
 	</cffunction>
@@ -73,6 +79,10 @@
   		<cffile
 		action="delete"
 		file="#getContextPath()#/gateway/railo/extension/gateway/#variables.gateway#">
+
+  		<cffile
+		action="delete"
+		file="#getContextPath()#/gateway/railo/extension/gateway/#variables.listener#">
 
         <cfreturn '#variables.name# is now successfully removed'>
 
