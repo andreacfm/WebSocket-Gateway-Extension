@@ -1,4 +1,4 @@
-h3. Railo WebSocket Gateway Extension
+h3. Railo WebSockets Gateway Extension
 
 p. Clone example apps "here":https://github.com/andreacfm/websockets_example_apps
 
