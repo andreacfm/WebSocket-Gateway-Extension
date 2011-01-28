@@ -10,6 +10,7 @@ public class WebSocketImpl{
 
     public WebSocketImpl(WebSocket ws,String type,String message) {
         _WebSockets = ws;
+        _type = type;
         setMessage(message);
     }
 

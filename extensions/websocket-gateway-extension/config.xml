@@ -2,12 +2,12 @@
 <config>
 	<info>
 		<id>45678243-BD9B-22DF-325D-0800200D9A44</id>
-		<version>0.4.201101192047</version>
+		<version>0.4.201101282238</version>
 		<name>WebSocketGateway</name>
 		<type>all</type>
 		<label>WebSocketGateway</label>
 		<description>WebSocket Gateway Extension</description>
-		<created>2011-January-19 20:47</created> 
+		<created>2011-January-28 22:38</created> 
 		<category>Gateway</category>
 		<author>Andrea Campolonghi</author>
 		<image></image>

@@ -85,6 +85,7 @@
                         <cfif len(config.onClientOpen)>
                             <cfset variables.listener[config.onClientOpen](data) >
                         </cfif>
+                        <cflog file="WebSocket" text="OnClientOpen - #data.message#" type="information">
                         <cfreturn>
                     </cfcase>
 
@@ -93,6 +94,7 @@
                         <cfif len(config.onClientClose)>
                             <cfset variables.listener[config.onClientClose](data) >
                         </cfif>
+                        <cflog file="WebSocket" text="OnClientClose - #data.message#" type="information">
                         <cfreturn>
                     </cfcase>
 
@@ -100,6 +102,7 @@
                         <cfif len(config.onMessage)>
                             <cfset variables.listener[config.onMessage](data) >
                         </cfif>
+                        <cflog file="WebSocket" text="OnMessage  - #data.message#" type="information">
                     </cfcase>
 
                 </cfswitch>
@@ -151,8 +154,11 @@
                 <cfloop condition="true">
                     <cfset conns = attributes.context.getServer().getConnectionsStack()>
                     <cfloop array="#conns#" index="conn">
-                        <cfset var data = {conn : conn, webSocketServerAction : conn.getType(), message : conn.getMessage()}>
-                        <cfset attributes.context.sendMessage(data)>
+                        <cfset var d = {}>
+                        <cfset d.conn = conn>
+                        <cfset d.webSocketServerAction = conn.getType()>
+                        <cfset d.message = conn.getMessage()>
+                        <cfset attributes.context.sendMessage(d)>
                     </cfloop>
                     <!--- remove the processed connections --->
                     <cfset conns.clear()>

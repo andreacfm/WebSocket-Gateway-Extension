@@ -12,7 +12,7 @@ public class WebSocketServerImpl extends WebSocketServer {
 
     public static final String ON_CLIENT_OPEN = "OnClientOpen";
     public static final String ON_CLIENT_ClOSE = "OnClientClose";
-    public static final String ON_CLIENT_MESSAGE = "OnClientMessage";
+    public static final String ON_CLIENT_MESSAGE = "OnMessage";
 
 	private String _gatewayID;
     private ArrayList _connectionsStack = new ArrayList();
