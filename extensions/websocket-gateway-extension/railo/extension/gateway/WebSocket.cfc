@@ -85,7 +85,9 @@
                         <cfif len(config.onClientOpen)>
                             <cfset variables.listener[config.onClientOpen](data) >
                         </cfif>
-                        <cflog file="WebSocket" text="OnClientOpen - #data.message#" type="information">
+                        <cfif variables.config.verbose>
+                            <cflog file="WebSocket" text="Action : OnClientOpen - Message : #data.message#" type="information">
+                        </cfif>
                         <cfreturn>
                     </cfcase>
 
@@ -94,7 +96,9 @@
                         <cfif len(config.onClientClose)>
                             <cfset variables.listener[config.onClientClose](data) >
                         </cfif>
-                        <cflog file="WebSocket" text="OnClientClose - #data.message#" type="information">
+                        <cfif variables.config.verbose>
+                            <cflog file="WebSocket" text="Action : OnClientClose - Message : #data.message#" type="information">
+                        </cfif>
                         <cfreturn>
                     </cfcase>
 
@@ -102,7 +106,9 @@
                         <cfif len(config.onMessage)>
                             <cfset variables.listener[config.onMessage](data) >
                         </cfif>
-                        <cflog file="WebSocket" text="OnMessage  - #data.message#" type="information">
+                        <cfif variables.config.verbose>
+                            <cflog file="WebSocket" text="Action : OnMessage  - Message : #data.message#" type="information">
+                        </cfif>
                     </cfcase>
 
                 </cfswitch>
