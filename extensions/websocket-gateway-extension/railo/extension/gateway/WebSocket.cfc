@@ -11,50 +11,49 @@
         <cfset variables.config=config>
         <cfset variables.listener=listener>
 
-        <cflog text="WebSocket Gateway [#arguments.id#] initialized" type="information" file="WebSocket">
+        <cflog text="WebSocket Gateway [#arguments.id#] initialized" type="information" file="websocket">
 
 	</cffunction>
 
 
 	<cffunction name="start" access="public" output="no" returntype="void">
-		<cflog text="Starting websocket server on port #variables.config.port#" type="information" file="WebSocket">
+		<cflog text="Starting websocket server on port #variables.config.port#" type="information" file="websocket">
         <cftry>
         	<cfset state="starting">
 
 			<cfset variables.server = createObject('java','railo.extension.gateway.websocket.WebSocketServerImpl').init(variables.config.port,variables.id)>
 			<cfset variables.server.start()>
          	<cfset state="running">
-         	<cflog text="Started websocket server on port #variables.config.port#" type="information" file="WebSocket">
+         	<cflog text="Started websocket server on port #variables.config.port#" type="information" file="websocket">
 			<cfset startFetcherThread()/>
 
         	<cfcatch>
             	 <cfset state="failed">
-            	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocket">
+            	 <cflog text="#cfcatch.message#" type="fatal" file="websocket">
                  <cfrethrow>
             </cfcatch>
         </cftry>
 	</cffunction>
 
 	<cffunction name="stop" access="public" output="no" returntype="void">
-		<cflog text="Stopping websocket server on port #variables.config.port#" type="information" file="WebSocket">
+		<cflog text="Stopping websocket server on port #variables.config.port#" type="information" file="websocket">
         <cftry>
         	<cfset state="stopping">
 
 			<cfset variables.server.stop()>
-            <cfset stopFetcherThread()>
 
          	<cfset state="stopped">
-         	<cflog text="Stopped websocket server on port #variables.config.port#" type="information" file="WebSocket">
+         	<cflog text="Stopped websocket server on port #variables.config.port#" type="information" file="websocket">
         	<cfcatch>
             	 <cfset state="failed">
-            	 <cflog text="#cfcatch.message#" type="fatal" file="WebSocket">
+            	 <cflog text="#cfcatch.message#" type="fatal" file="websocket">
                  <cfrethrow>
             </cfcatch>
         </cftry>
 	</cffunction>
 
 	<cffunction name="restart" access="public" output="no" returntype="void">
-		<cflog text="Restarting websocket server on port #variables.config.port#" type="information" file="WebSocket">
+		<cflog text="Restarting websocket server on port #variables.config.port#" type="information" file="websocket">
         <cfif state EQ "running"><cfset stop()></cfif>
 		<cfset start()>
 	</cffunction>
@@ -86,7 +85,7 @@
                             <cfset variables.listener[config.onClientOpen](data) >
                         </cfif>
                         <cfif variables.config.verbose>
-                            <cflog file="WebSocket" text="Action : OnClientOpen - Message : #data.message#" type="information">
+                            <cflog file="websocket" text="Action : OnClientOpen - Message : #data.message#" type="information">
                         </cfif>
                         <cfreturn>
                     </cfcase>
@@ -97,7 +96,7 @@
                             <cfset variables.listener[config.onClientClose](data) >
                         </cfif>
                         <cfif variables.config.verbose>
-                            <cflog file="WebSocket" text="Action : OnClientClose - Message : #data.message#" type="information">
+                            <cflog file="websocket" text="Action : OnClientClose - Message : #data.message#" type="information">
                         </cfif>
                         <cfreturn>
                     </cfcase>
@@ -107,7 +106,7 @@
                             <cfset variables.listener[config.onMessage](data) >
                         </cfif>
                         <cfif variables.config.verbose>
-                            <cflog file="WebSocket" text="Action : OnMessage  - Message : #data.message#" type="information">
+                            <cflog file="websocket" text="Action : OnMessage  - Message : #data.message#" type="information">
                         </cfif>
                     </cfcase>
 
@@ -142,7 +141,7 @@
 
 
             <cfcatch type="any">
-                <cflog type="error" text="#cfcatch.message#" file="WebSocket"/>
+                <cflog type="error" text="#cfcatch.message#" file="websocket"/>
                 <cfrethrow/>
             </cfcatch>
 
@@ -153,11 +152,12 @@
 
     <cffunction name="startFetcherThread" access="private" output="false" hint="start the thread that will fetch and process incoming connections">
 
-        <cflog type="information" text="WebSocket Gateway starting fetching messages thread" file="WebSocket"/>
+        <cflog type="information" text="WebSocket Gateway starting fetching messages thread" file="websocket"/>
 
         <cfthread name="_webSocketFetcherThread_#variables.id#" action="run" context="#this#">
             <cftry>
-                <cfloop condition="true">
+
+                <cfloop condition="#context.getState() eq 'running'#">
                     <cfset conns = attributes.context.getServer().getConnectionsStack()>
                     <cfloop array="#conns#" index="conn">
                         <cfset var d = {}>
@@ -172,17 +172,11 @@
                 </cfloop>
 
                 <cfcatch type="any">
-                    <cflog type="error" text="fecthing thread : #cfcatch.message#" file="WebSocket"/>
+                    <cflog type="error" text="fecthing thread : #cfcatch.message#" file="websocket"/>
                     <cfrethrow>
                 </cfcatch>
             </cftry>
         </cfthread>
-
-    </cffunction>
-
-    <cffunction name="stopFetcherThread" access="private" output="false">
-
-        <cfthread name="_webSocketFetcherThread_#variables.id#" action="terminate"/>
 
     </cffunction>
 
