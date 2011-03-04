@@ -25,7 +25,23 @@
 			<cfset variables.server.start()>
          	<cfset state="running">
          	<cflog text="Started websocket server on port #variables.config.port#" type="information" file="websocket">
-			<cfset startFetcherThread()/>
+
+
+			<cfwhile state eq 'running'>
+                <cfset var conns = getServer().getConnectionsStack()>
+                <cfset var it = conns.iterator()>
+                <cfwhile it.hasNext()>
+                    <cfset var conn = it.next()>
+                    <cfset var d = {}>
+                    <cfset d.conn = conn>
+                    <cfset d.webSocketServerAction = conn.getType()>
+                    <cfset d.message = conn.getMessage()>
+                    <cfset sendMessage(d)>
+                    <cfset it.remove()>
+                </cfwhile>
+                <!--- remove the processed connections --->
+                <cfset sleep(200)>
+			</cfwhile>
 
         	<cfcatch>
             	 <cfset state="failed">
@@ -148,36 +164,4 @@
         </cftry>
 
 	</cffunction>
-
-
-    <cffunction name="startFetcherThread" access="private" output="false" hint="start the thread that will fetch and process incoming connections">
-
-        <cflog type="information" text="WebSocket Gateway starting fetching messages thread" file="websocket"/>
-
-        <cfthread name="_webSocketFetcherThread_#variables.id#" action="run" context="#this#">
-            <cftry>
-
-                <cfloop condition="#context.getState() eq 'running'#">
-                    <cfset conns = attributes.context.getServer().getConnectionsStack()>
-                    <cfloop array="#conns#" index="conn">
-                        <cfset var d = {}>
-                        <cfset d.conn = conn>
-                        <cfset d.webSocketServerAction = conn.getType()>
-                        <cfset d.message = conn.getMessage()>
-                        <cfset attributes.context.sendMessage(d)>
-                    </cfloop>
-                    <!--- remove the processed connections --->
-                    <cfset conns.clear()>
-                    <cfset sleep(1000)>
-                </cfloop>
-
-                <cfcatch type="any">
-                    <cflog type="error" text="fecthing thread : #cfcatch.message#" file="websocket"/>
-                    <cfrethrow>
-                </cfcatch>
-            </cftry>
-        </cfthread>
-
-    </cffunction>
-
 </cfcomponent>
