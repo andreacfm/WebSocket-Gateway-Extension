@@ -12,5 +12,7 @@
 *.classpath
 /.settings
 *.iml
+*.iws
+*.ipr
 /.idea
 /railo
