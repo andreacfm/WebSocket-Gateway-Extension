@@ -37,19 +37,15 @@
             source="#path#driver/#variables.driver#"
             destination="admin/gdriver/#variables.driver#">
 
-        <cfadmin
-        	action="updateContext"
-            type="#request.adminType#"
-            password="#session["password"&request.adminType]#"
-            source="#path#railo/extension/gateway/#variables.gateway#"
-            destination="gateway/railo/extension/gateway/#variables.gateway#">
+        <cffile
+        action="copy"
+        source="#path#railo/extension/gateway/#variables.gateway#"
+        destination="#expandPath('{railo-web}')#/gateway/railo/extension/gateway/#variables.gateway#">
 
-        <cfadmin
-        	action="updateContext"
-            type="#request.adminType#"
-            password="#session["password"&request.adminType]#"
-            source="#path#railo/extension/gateway/#variables.listener#"
-            destination="gateway/railo/extension/gateway/#variables.listener#">
+        <cffile
+        action="copy"
+        source="#path#railo/extension/gateway/#variables.listener#"
+        destination="#expandPath('{railo-web}')#/gateway/railo/extension/gateway/#variables.listener#">
 
         <cfreturn '#variables.name# is now successfully installed'>
 
@@ -83,17 +79,13 @@
             destination="admin/gdriver/#variables.driver#">
 
 
-		<cfadmin
-        	action="removeContext"
-            type="#request.adminType#"
-            password="#session["password"&request.adminType]#"
-            destination="gateway/railo/extension/gateway/#variables.gateway#">
+        <cffile
+        action="delete"
+        file="#expandPath('{railo-web}')#/gateway/railo/extension/gateway/#variables.gateway#">
 
-		<cfadmin
-        	action="removeContext"
-            type="#request.adminType#"
-            password="#session["password"&request.adminType]#"
-            destination="gateway/railo/extension/gateway/#variables.listener#">
+        <cffile
+        action="delete"
+        file="#expandPath('{railo-web}')#/gateway/railo/extension/gateway/#variables.listener#">
 
         <cfreturn '#variables.name# is now successfully removed'>
 
