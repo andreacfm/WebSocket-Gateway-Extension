@@ -1,4 +1,4 @@
-﻿component{
+﻿﻿component{
 
     variables.state="stopped";
 
