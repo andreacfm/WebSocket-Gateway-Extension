@@ -1,18 +1,16 @@
 #project
 /WEB-INF/
-/extensions/ext/*.zip
-/extensions/output/*.*
-/extensions/unames.xml
-/extensions/websocket-gateway-extension/bin
+/ext/
+/output/
+/extension/bin
+/extension/lib
+/extension/config.xml
 
 #extensions
 *.project
 *.class
 *.DS_Store
 *.classpath
-/.settings
 *.iml
-*.iws
-*.ipr
 /.idea
-/railo
+

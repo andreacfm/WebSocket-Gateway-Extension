@@ -1,19 +1,19 @@
-﻿<cfcomponent>
+﻿component{
 
-    <cfset state="stopped">
+    variables.state="stopped";
 
-	<cffunction name="init" access="public" output="no" returntype="void">
-		<cfargument name="id" required="false" type="string">
-		<cfargument name="config" required="false" type="struct">
-		<cfargument name="listener" required="false" type="component">
+    public void function init(String id, Struct config, Component listener){
+    	variables.id=id;
+        variables.config=config;
+        variables.listener=listener;
 
-    	<cfset variables.id=id>
-        <cfset variables.config=config>
-        <cfset variables.listener=listener>
+        log text="WebSocket Gateway [#arguments.id#] initialized" type="information" file="websocket";
 
-        <cflog text="WebSocket Gateway [#arguments.id#] initialized" type="information" file="websocket">
+    }
 
-	</cffunction>
+}
+<cfcomponent>
+
 
 
 	<cffunction name="start" access="public" output="no" returntype="void">
@@ -37,9 +37,9 @@
                     <cfset d.webSocketServerAction = conn.getType()>
                     <cfset d.message = conn.getMessage()>
                     <cfset sendMessage(d)>
+                    <!--- remove the processed connections --->
                     <cfset it.remove()>
                 </cfwhile>
-                <!--- remove the processed connections --->
                 <cfset sleep(200)>
 			</cfwhile>
 
