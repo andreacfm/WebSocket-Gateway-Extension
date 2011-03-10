@@ -30,20 +30,26 @@
             destination="#getContextPath()#/lib/#i#">
 		</cfloop>
 
-		<cffile
-		action="copy"
-		source="#path#driver/#variables.driver#"
-		destination="#getContextPath()#/context/admin/gdriver/#variables.driver#">
+        <cfadmin
+        	action="updateContext"
+            type="#request.adminType#"
+            password="#session["password"&request.adminType]#"
+            source="#path#driver/#variables.driver#"
+            destination="admin/gdriver/#variables.driver#">
 
-		<cffile
-		action="copy"
-		source="#path#railo/extension/gateway/#variables.gateway#"
-		destination="#getContextPath()#/gateway/railo/extension/gateway/#variables.gateway#">
+        <cfadmin
+        	action="updateContext"
+            type="#request.adminType#"
+            password="#session["password"&request.adminType]#"
+            source="#path#railo/extension/gateway/#variables.gateway#"
+            destination="gateway/railo/extension/gateway/#variables.gateway#">
 
-		<cffile
-		action="copy"
-		source="#path#railo/extension/gateway/#variables.listener#"
-		destination="#getContextPath()#/gateway/railo/extension/gateway/#variables.listener#">
+        <cfadmin
+        	action="updateContext"
+            type="#request.adminType#"
+            password="#session["password"&request.adminType]#"
+            source="#path#railo/extension/gateway/#variables.listener#"
+            destination="gateway/railo/extension/gateway/#variables.listener#">
 
         <cfreturn '#variables.name# is now successfully installed'>
 
@@ -65,24 +71,29 @@
         <cfargument name="config" type="struct">
 
 		<cfloop list="#variables.jars#" index="i">
-			<cfadmin
-	            action="removeJar"
-	            type="#request.adminType#"
-	            password="#session["password"&request.adminType]#"
-	            jar="#path#lib/#i#">
+            <cffile
+            action="delete"
+            file="#getContextPath()#/lib/#i#">
 		</cfloop>
 
-		<cffile
-		action="delete"
-		file="#getContextPath()#/context/admin/gdriver/#variables.driver#">
+		<cfadmin
+        	action="removeContext"
+            type="#request.adminType#"
+            password="#session["password"&request.adminType]#"
+            destination="admin/gdriver/#variables.driver#">
 
-  		<cffile
-		action="delete"
-		file="#getContextPath()#/gateway/railo/extension/gateway/#variables.gateway#">
 
-  		<cffile
-		action="delete"
-		file="#getContextPath()#/gateway/railo/extension/gateway/#variables.listener#">
+		<cfadmin
+        	action="removeContext"
+            type="#request.adminType#"
+            password="#session["password"&request.adminType]#"
+            destination="gateway/railo/extension/gateway/#variables.gateway#">
+
+		<cfadmin
+        	action="removeContext"
+            type="#request.adminType#"
+            password="#session["password"&request.adminType]#"
+            destination="gateway/railo/extension/gateway/#variables.listener#">
 
         <cfreturn '#variables.name# is now successfully removed'>
 
