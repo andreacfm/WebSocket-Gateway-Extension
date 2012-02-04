@@ -16,7 +16,7 @@
         <cfargument name="step" type="numeric">
         
     </cffunction>
-    
+
     <cffunction name="install" returntype="string" output="no"
     	hint="called from Railo to install application">
     	<cfargument name="error" type="struct">
@@ -30,12 +30,9 @@
             destination="#getContextPath()#/lib/#i#">
 		</cfloop>
 
-        <cfadmin
-        	action="updateContext"
-            type="#request.adminType#"
-            password="#session["password"&request.adminType]#"
-            source="#path#driver/#variables.driver#"
-            destination="admin/gdriver/#variables.driver#">
+        <cffile action="copy"
+                source="#path#driver/#variables.driver#"
+                destination="#expandPath('{railo-web}')#/context/admin/cdriver/" />
 
         <cffile
         action="copy"
@@ -72,12 +69,10 @@
             file="#getContextPath()#/lib/#i#">
 		</cfloop>
 
-		<cfadmin
-        	action="removeContext"
-            type="#request.adminType#"
-            password="#session["password"&request.adminType]#"
-            destination="admin/gdriver/#variables.driver#">
 
+        <cffile action="delete"
+                source="#path#driver/#variables.driver#"
+                file="#expandPath('{railo-web}')#/context/admin/cdriver/#variables.driver#" />
 
         <cffile
         action="delete"
