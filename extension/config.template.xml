@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
+
 <config>
+
 	<info>
 		<id>45678243-BD9B-22DF-325D-0800200D9A44</id>
 		<version>{version}</version>
@@ -10,10 +12,11 @@
 		<created>{created}</created> 
 		<category>Gateway</category>
 		<author>Andrea Campolonghi</author>
-		<image></image>
+		<image>http://preview.getrailo.org/logos/websocket-gateway-logo.png</image>
 		<mailinglist>http://groups.google.com/group/railo-beta</mailinglist>
 		<support>http://groups.google.com/group/railo-beta</support>
 		<documentation></documentation>		
 	</info>
+
 </config>
 
