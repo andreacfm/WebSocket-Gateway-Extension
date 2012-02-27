@@ -37,12 +37,12 @@
         <cffile
         action="copy"
         source="#path#railo/extension/gateway/#variables.gateway#"
-        destination="#expandPath('{railo-web}')#/gateway/railo/extension/gateway/#variables.gateway#">
+        destination="#expandPath('{railo-web}')#/components/railo/extension/gateway/#variables.gateway#">
 
         <cffile
         action="copy"
         source="#path#railo/extension/gateway/#variables.listener#"
-        destination="#expandPath('{railo-web}')#/gateway/railo/extension/gateway/#variables.listener#">
+        destination="#expandPath('{railo-web}')#/components/railo/extension/gateway/#variables.listener#">
 
         <cfreturn '#variables.name# is now successfully installed'>
 
@@ -76,11 +76,11 @@
 
         <cffile
         action="delete"
-        file="#expandPath('{railo-web}')#/gateway/railo/extension/gateway/#variables.gateway#">
+        file="#expandPath('{railo-web}')#/components/railo/extension/gateway/#variables.gateway#">
 
         <cffile
         action="delete"
-        file="#expandPath('{railo-web}')#/gateway/railo/extension/gateway/#variables.listener#">
+        file="#expandPath('{railo-web}')#/components/railo/extension/gateway/#variables.listener#">
 
         <cfreturn '#variables.name# is now successfully removed'>
 
