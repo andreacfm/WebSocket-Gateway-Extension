@@ -1,0 +1,43 @@
+body {
+    font-family: Arial;
+    color: #666666;
+}
+
+h1 {
+    font-size: 14px;
+}
+
+#chat_panel {
+    width: 100%;
+    height: 300px;
+    margin-top:20px;
+    padding:5px;
+    overflow:auto;
+    font: normal 12px Verdana, sans-serif;
+    color:#333;
+    border: 1px solid #d7d7d7;
+    padding: 5px;
+    background: #FFFFFF url(../images/topfade.gif) repeat-x scroll center top;
+}
+
+#chat_panel p{
+    margin:2px 0;
+    font-size:13px;
+}
+
+#chat_panel span.nickname{
+    color:#29326E;
+}
+
+#chat_panel span.text{
+    font-style:italic;
+}
+
+input {
+    margin:0;
+    border: 1px solid #666666;
+}
+
+#send{
+    margin-left:10px;
+}

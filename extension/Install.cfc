@@ -32,7 +32,7 @@
 
         <cffile action="copy"
                 source="#path#driver/#variables.driver#"
-                destination="#expandPath('{railo-web}')#/context/admin/cdriver/" />
+                destination="#expandPath('{railo-web}')#/context/admin/gdriver/" />
 
         <cffile
         action="copy"
@@ -72,7 +72,7 @@
 
         <cffile action="delete"
                 source="#path#driver/#variables.driver#"
-                file="#expandPath('{railo-web}')#/context/admin/cdriver/#variables.driver#" />
+                file="#expandPath('{railo-web}')#/context/admin/gdriver/#variables.driver#" />
 
         <cffile
         action="delete"

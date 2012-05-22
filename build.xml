@@ -26,7 +26,7 @@
         </copy>
 
         <echo message="Deploying Gateway"/>
-        <copy todir="${context_path}/gateway/railo/extension/gateway" overwrite="true">
+        <copy todir="${context_path}/components/railo/extension/gateway" overwrite="true">
             <fileset dir="${project.extPath}/railo/extension/gateway" includes="*cfc"/>
         </copy>
 

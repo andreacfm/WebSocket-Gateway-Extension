@@ -1,0 +1,3 @@
+h2. Railo Websocket Gateway Extension Sample Apps
+
+p. The repo includes examples about implementing the Websocket Gateway in Railo Cfml Engine. For docs about the gateway visit this "wiki page":http://wiki.getrailo.org/wiki/Extensions:WebSockets_Gateway.
