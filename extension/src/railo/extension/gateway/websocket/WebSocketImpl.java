@@ -1,6 +1,6 @@
 package railo.extension.gateway.websocket;
 
-import net.tootallnate.websocket.WebSocket;
+import org.java_websocket.WebSocket;
 
 public class WebSocketImpl{
 

@@ -56,9 +56,6 @@
 	
 	<target name="createJar" depends="deleteArchives">
 		<path id="master-classpath">
-			<fileset dir="../../railo/">
-				<include name="*.jar"/>
-			 </fileset>
 			 <fileset dir="lib/">
 			    <include name="*.jar"/>
 			  </fileset>	

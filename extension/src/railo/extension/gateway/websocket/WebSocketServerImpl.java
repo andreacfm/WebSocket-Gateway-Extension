@@ -1,11 +1,14 @@
 package railo.extension.gateway.websocket;
 
-import net.tootallnate.websocket.WebSocket;
-import net.tootallnate.websocket.WebSocketServer;
+import org.java_websocket.WebSocket;
+import org.java_websocket.WebSocketServer;
+import org.java_websocket.handshake.ClientHandshake;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 
 public class WebSocketServerImpl extends WebSocketServer {
 
@@ -14,66 +17,79 @@ public class WebSocketServerImpl extends WebSocketServer {
     public static final String ON_CLIENT_ClOSE = "OnClientClose";
     public static final String ON_CLIENT_MESSAGE = "OnMessage";
 
-	private String _gatewayID;
+    private String _gatewayID;
     private ArrayList _connectionsStack = new ArrayList();
 
-    public WebSocketServerImpl(String port,String id) {
-		super(Integer.parseInt(port));
-    	_gatewayID = id;
+    public WebSocketServerImpl(String port, String id) {
+        super(new InetSocketAddress(Integer.parseInt(port)));
+        _gatewayID = id;
     }
 
-	@Override
-	public void onClientOpen(WebSocket conn) {
-        WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_OPEN,"");
+    public void onOpen(WebSocket conn, ClientHandshake clientHandshake) {
+        WebSocketImpl ws = new WebSocketImpl(conn, ON_CLIENT_OPEN, "");
         _connectionsStack.add(ws);
-	}
-
-	@Override
-	public void onClientClose(WebSocket conn) {
-        WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_ClOSE,"");
-        _connectionsStack.add(ws);
-	}
-
-	@Override
-	public void onClientMessage(WebSocket conn, String message) {
-        WebSocketImpl ws = new WebSocketImpl(conn,ON_CLIENT_MESSAGE,message);
-        _connectionsStack.add(ws);
-
-	}
-
-
-    @Override
-    public void sendToAll(String s) throws IOException {
-        super.sendToAll(s);
     }
 
-    /**
-     * Send to all the connections except the one passed
-     * @param webSocket
-     * @param message
-     * @throws IOException
-     */
+    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+        WebSocketImpl ws = new WebSocketImpl(conn, ON_CLIENT_ClOSE, "");
+        _connectionsStack.add(ws);
+    }
+
+    public void onMessage(WebSocket conn, String message) {
+        WebSocketImpl ws = new WebSocketImpl(conn, ON_CLIENT_MESSAGE, message);
+        _connectionsStack.add(ws);
+
+    }
+
+
+    public void onError(WebSocket conn, Exception e) {
+
+    }
+
+    public void sendToAll(String text) {
+        Set<WebSocket> con = connections();
+        synchronized (con) {
+            for (WebSocket c : con) {
+                try {
+                    c.send(text);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public void sendToAllExcept(WebSocketImpl webSocket, String message) throws IOException {
-        super.sendToAllExcept(webSocket.getWebSocket(), message);
+        Set<WebSocket> con = connections();
+        synchronized (con) {
+            for (WebSocket c : con) {
+                try {
+                    if (c == webSocket.getWebSocket()) {
+                        continue;
+                    }
+                    c.send(message);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    public void send(ArrayList conns, String text) throws IOException {
+        Iterator it = conns.iterator();
+        while (it.hasNext()) {
+            WebSocketImpl ws = (WebSocketImpl) it.next();
+            try {
+                ws.getWebSocket().send(ws.getMessage());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     /**
-	 *  Sends <var>text</var> to the passed clients if they exists.
-	 * @param conns
-	 * @param text
-	 * @throws IOException
-	 */
-	  public void send(ArrayList conns, String text) throws IOException {
-		  Iterator it = conns.iterator();
-		  while(it.hasNext()){
-              WebSocketImpl ws = (WebSocketImpl)it.next();
-			  ws.getWebSocket().send(ws.getMessage());
-		  }
-
-	  }
-
-    /**
-     *
      * @return the actual connections stack
      */
     public ArrayList getConnectionsStack() {
