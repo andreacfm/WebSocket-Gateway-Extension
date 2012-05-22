@@ -1,6 +1,7 @@
 var ws;
 $(document).ready(function(){
     ws = new WebSocket('ws://localhost:10126');
+    console.log(ws);
     ws.onmessage = function(ev){
         var data = $.parseJSON(ev.data);
         for(key in data){

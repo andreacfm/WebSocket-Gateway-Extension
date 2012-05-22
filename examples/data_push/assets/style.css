@@ -17,7 +17,7 @@ body {
 	font-size: 70%;
 	line-height: 1.5;
 	color: #333; 
-	background: #FFF url(../images/bg.gif) repeat-x;	
+	background: #FFF url(../../images/headerbg.gif) repeat-x;
 }
 img{
 	vertical-align: middle;	
@@ -68,8 +68,8 @@ a.noborder{
 h1, h2, h3, h4, h5 {
 	font-weight: bold;
 	color: #333;
-	padding: 5px 0 0 0;		
-	margin: 5px;
+	padding: 2px 0 0 0;
+	margin: 2px;
 }
 p{
 	padding: 0px;
