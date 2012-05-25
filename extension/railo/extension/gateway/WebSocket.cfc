@@ -1,9 +1,9 @@
 ﻿component{
 
-    import "railo.extension.gateway.websocketes.*";
+    import "railo.extension.gateway.websockets.*";
 
     variables.state="stopped";
-    variables.handlerFactory = new HandlerFactory();
+    variables.handlerFactory = new HandlerFactory(this);
 
     public void function init(String id, Struct config, Component listener){
     	variables.id=id;
