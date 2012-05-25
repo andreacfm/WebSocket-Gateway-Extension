@@ -7,6 +7,7 @@ public class WebSocketImpl{
     private WebSocket _WebSockets;
     private String _type;
     private String _message;
+    private Boolean _authenticated = true;
 
     public WebSocketImpl(WebSocket ws,String type,String message) {
         _WebSockets = ws;
@@ -30,5 +31,8 @@ public class WebSocketImpl{
         return _message;
     }
 
+    public boolean isAuthenticated(){
+        return _authenticated;
+    }
 
 }

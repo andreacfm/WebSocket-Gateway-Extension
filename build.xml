@@ -13,29 +13,37 @@
 	</tstamp>
 
 
-	<target name="updateExtension" depends="compressExtension">
+	<target name="updateExtension" depends="compressExtension,deployLib,deployDriver,deployGateway,restartRailo"/>
 
+    <target name="deployLib">
         <echo message="Deploying new lib"/>
         <copy todir="${context_path}/lib" overwrite="true">
             <fileset dir="${project.extPath}/lib" includes="*jar"/>
         </copy>
+    </target>
 
+
+    <target name="deployDriver">
         <echo message="Deploying new driver"/>
         <copy todir="${context_path}/context/admin/gdriver/" overwrite="true">
             <fileset dir="${project.extPath}/driver" includes="*cfc"/>
         </copy>
+    </target>
 
+    <target name="deployGateway">
         <echo message="Deploying Gateway"/>
-        <copy todir="${context_path}/components/railo/extension/gateway" overwrite="true">
-            <fileset dir="${project.extPath}/railo/extension/gateway" includes="*cfc"/>
-        </copy>
+        <copydir src="${project.extPath}/railo/extension/gateway"
+                 dest="${context_path}/components/railo/extension/gateway"
+                 includes="**/*.cfc"
+                />
+    </target>
 
+    <target name="restartRailo">
         <echo message="restart railo"/>
         <get src="http://${server.name}:${server.port}/reload.cfm" dest="output/output.html" ignoreerrors="true" />
+    </target>
 
-	</target>
-
-	<target name="compressExtension" depends="replaceConfigVars">
+    <target name="compressExtension" depends="replaceConfigVars">
 		<zip destfile="ext/websocket-gateway.zip" basedir="${project.extPath}">
 			<exclude name="**/src/**"/>
 			<exclude name="**/bin/**"/>			
