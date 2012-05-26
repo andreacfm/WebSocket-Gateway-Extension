@@ -76,12 +76,12 @@ public class WebSocketServerImpl extends WebSocketServer {
 
     }
 
-    public void send(ArrayList conns, String text) throws IOException {
+    public void send(ArrayList conns, String message) throws IOException {
         Iterator it = conns.iterator();
         while (it.hasNext()) {
             WebSocketImpl ws = (WebSocketImpl) it.next();
             try {
-                ws.getWebSocket().send(ws.getMessage());
+                ws.getWebSocket().send(message);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
