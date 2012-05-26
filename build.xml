@@ -13,7 +13,7 @@
     </tstamp>
 
 
-    <target name="updateExtension" depends="builExtension,deployLib,deployDriver,deployGateway,restartRailo"/>
+    <target name="updateExtension" depends="buildExtension,deployLib,deployDriver,deployGateway,restartRailo"/>
 
     <target name="deployLib">
         <echo message="Deploying new lib"/>
@@ -32,6 +32,8 @@
 
     <target name="deployGateway">
         <echo message="Deploying Gateway"/>
+        <delete dir="${context_path}/components/railo/extension/gateway/websockets" includes="*.cfc" />
+        <delete dir="${context_path}/components/railo/extension/gateway" includes="WebSocket.cfc,WebSocketListener.cfc" />
         <copydir src="${project.extPath}/railo/extension/gateway"
                  dest="${context_path}/components/railo/extension/gateway"
                  includes="**/*.cfc"
@@ -43,7 +45,7 @@
         <get src="http://${server.name}:${server.port}/reload.cfm" dest="output/output.html" ignoreerrors="true" />
     </target>
 
-    <target name="builExtension" depends="replaceConfigVars">
+    <target name="buildExtension" depends="replaceConfigVars">
         <zip destfile="ext/websocket-gateway.zip" basedir="${project.extPath}">
             <exclude name="**/src/**"/>
             <exclude name="**/bin/**"/>
