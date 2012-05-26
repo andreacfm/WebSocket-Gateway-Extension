@@ -2,6 +2,8 @@
 
     import "railo.extension.gateway.websockets.*";
 
+    property name="listener";
+
     variables.state="stopped";
     variables.handlerFactory = new HandlerFactory(this);
 
@@ -82,7 +84,11 @@
 		start();
 	}
 
-	public any function getHelper(){
+    public function handle(conn){
+        variables.handlerFactory.getHandler(conn).handle(conn);
+    }
+
+    public any function getHelper(){
 	}
 
 	public String function getState(){

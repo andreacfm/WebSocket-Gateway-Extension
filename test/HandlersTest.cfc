@@ -1,9 +1,11 @@
 component extends="mxunit.framework.TestCase"{
 
+    import "railo.extension.gateway.*"
     import "railo.extension.gateway.websockets.*"
 
     public function setUp(){
-        gateway = mock();
+        listener = mock("railo.extension.gateway.WebSocketListener")
+        gateway = new WebSocket("id",{}, listener);
         handleFactory = new HandlerFactory(gateway);
     }
 
@@ -26,7 +28,10 @@ component extends="mxunit.framework.TestCase"{
     }
 
     public function test_on_client_open_should_invoke_the_listener(){
-
+        var conn = mock();
+        conn.getType().returns("OnClientOpen");
+        gateway.handle(conn);
+        listener.verifyOnce().onClientOpen();
     }
 
 }

@@ -1,7 +1,15 @@
 component extends="Handler"{
 
     public void function handle(conn){
-        writelog(text="Handling OnClientOpen", type="information", file="websocket");
-    }
+        var config = gateway.getConfig();
+        var listener = gateway.getListener();
 
+        if(len(config.onClientOpen)){
+            listener[config.onClientOpen](data);
+        }
+        if(config.verbose){
+            writelog(file="websocket", text="Action : OnClientOpen - Message : #data.message#", type="information");
+        }
+        return;
+    }
 }
