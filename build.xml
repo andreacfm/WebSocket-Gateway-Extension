@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="WebSocketGatewayBuilder" basedir="" default="updateExtension">
 
-	<!-- project properties -->
-	<property file="project.properties"/>
+    <!-- project properties -->
+    <property file="project.properties"/>
 
-	<tstamp prefix="stamp">
-		 <format property="TODAY_UK" pattern="yyyyMMMMdhhmm" locale="en,UK"/>
-	</tstamp>
-	<tstamp prefix="created">
-		<format property="TODAY" pattern="yyyy-MMMM-d" locale="en,UK"/>
-		<format property="TSTAMP" pattern="HH:mm" locale="en,UK"/>
-	</tstamp>
+    <tstamp prefix="stamp">
+        <format property="TODAY_UK" pattern="yyyyMMMMdhhmm" locale="en,UK"/>
+    </tstamp>
+    <tstamp prefix="created">
+        <format property="TODAY" pattern="yyyy-MMMM-d" locale="en,UK"/>
+        <format property="TSTAMP" pattern="HH:mm" locale="en,UK"/>
+    </tstamp>
 
-
-	<target name="updateExtension" depends="compressExtension,deployLib,deployDriver,deployGateway,restartRailo"/>
+    <target name="updateExtension" depends="buildExtension,deployLib,deployDriver,deployGateway,restartRailo"/>
 
     <target name="deployLib">
         <echo message="Deploying new lib"/>
@@ -32,6 +31,8 @@
 
     <target name="deployGateway">
         <echo message="Deploying Gateway"/>
+        <delete dir="${context_path}/components/railo/extension/gateway/websockets" includes="*.cfc" />
+        <delete dir="${context_path}/components/railo/extension/gateway" includes="WebSocket.cfc,WebSocketListener.cfc" />
         <copydir src="${project.extPath}/railo/extension/gateway"
                  dest="${context_path}/components/railo/extension/gateway"
                  includes="**/*.cfc"
@@ -43,44 +44,44 @@
         <get src="http://${server.name}:${server.port}/reload.cfm" dest="output/output.html" ignoreerrors="true" />
     </target>
 
-    <target name="compressExtension" depends="replaceConfigVars">
-		<zip destfile="ext/websocket-gateway.zip" basedir="${project.extPath}">
-			<exclude name="**/src/**"/>
-			<exclude name="**/bin/**"/>			
-		</zip>
-	</target>
+    <target name="buildExtension" depends="replaceConfigVars">
+        <zip destfile="ext/websocket-gateway.zip" basedir="${project.extPath}">
+            <exclude name="**/src/**"/>
+            <exclude name="**/bin/**"/>
+        </zip>
+    </target>
 
-	<target name="replaceConfigVars" depends="copyLibs">
-		<copy file="${project.extPath}/config.template.xml" tofile="${project.extPath}/config.xml" overwrite="true" />
-		<replace file="${project.extPath}/config.xml" token="{version}" value="${version}.${stamp.DSTAMP}${stamp.TSTAMP}" />
-		<replace file="${project.extPath}/config.xml" token="{created}" value="${created.TODAY} ${created.TSTAMP}" />
-	</target>
-	
-	<target name="copyLibs" depends="createJar">
-		<copy todir="${project.extPath}/lib/">
-		    <fileset dir="lib/"/>
-		</copy>
-	</target>
-	
-	<target name="createJar" depends="deleteArchives">
-		<path id="master-classpath">
-			 <fileset dir="lib/">
-			    <include name="*.jar"/>
-			  </fileset>	
-		</path>
-		<javac srcdir="${project.extPath}/src" destdir="${project.extPath}/bin">
-			 <classpath refid="master-classpath"/>
-		</javac>
-		<jar basedir="${project.extPath}/bin" destfile="${project.extPath}/lib/websocket-gateway.jar" />
-	</target>
-	
-	<target name="deleteArchives">
-		<delete dir="${project.extPath}/lib/" includes="*.jar" />
-		<delete dir="ext/" includes="*.zip"/>
-		<delete dir="output/" includes="*"/>
-		<delete file="${project.extPath}/config.xml" />
-		<mkdir dir="${project.extPath}/lib/" />
+    <target name="replaceConfigVars" depends="copyLibs">
+        <copy file="${project.extPath}/config.template.xml" tofile="${project.extPath}/config.xml" overwrite="true" />
+        <replace file="${project.extPath}/config.xml" token="{version}" value="${version}.${stamp.DSTAMP}${stamp.TSTAMP}" />
+        <replace file="${project.extPath}/config.xml" token="{created}" value="${created.TODAY} ${created.TSTAMP}" />
+    </target>
+
+    <target name="copyLibs" depends="createJar">
+        <copy todir="${project.extPath}/lib/">
+            <fileset dir="lib/"/>
+        </copy>
+    </target>
+
+    <target name="createJar" depends="deleteArchives">
+        <path id="master-classpath">
+            <fileset dir="lib/">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        <javac srcdir="${project.extPath}/src" destdir="${project.extPath}/bin">
+            <classpath refid="master-classpath"/>
+        </javac>
+        <jar basedir="${project.extPath}/bin" destfile="${project.extPath}/lib/websocket-gateway.jar" />
+    </target>
+
+    <target name="deleteArchives">
+        <delete dir="${project.extPath}/lib/" includes="*.jar" />
+        <delete dir="ext/" includes="*.zip"/>
+        <delete dir="output/" includes="*"/>
+        <delete file="${project.extPath}/config.xml" />
+        <mkdir dir="${project.extPath}/lib/" />
         <mkdir dir="output/" />
-	</target>
+    </target>
 
 </project>
