@@ -1,8 +1,9 @@
-﻿component{
+﻿component accessors=true{
 
     import "railo.extension.gateway.websockets.*";
 
     property name="listener";
+    property name="config";
 
     variables.state="stopped";
     variables.handlerFactory = new HandlerFactory(this);

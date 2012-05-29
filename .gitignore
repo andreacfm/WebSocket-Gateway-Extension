@@ -1,10 +1,10 @@
 #project
 /WEB-INF/
-/ext/
 /output/
 /extension/bin
 /extension/lib
 /extension/config.xml
+/dummy/
 
 #extensions
 *.project
