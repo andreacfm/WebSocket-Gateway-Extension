@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="WebSocketGatewayBuilder" basedir="" default="updateExtension">
 
+    <include file="version.xml"/>
+
     <!-- project properties -->
     <property file="project.properties"/>
 
@@ -53,7 +55,7 @@
 
     <target name="replaceConfigVars" depends="copyLibs">
         <copy file="${project.extPath}/config.template.xml" tofile="${project.extPath}/config.xml" overwrite="true" />
-        <replace file="${project.extPath}/config.xml" token="{version}" value="${version}.${stamp.DSTAMP}${stamp.TSTAMP}" />
+        <replace file="${project.extPath}/config.xml" token="{version}" value="${build.number}.${stamp.DSTAMP}${stamp.TSTAMP}" />
         <replace file="${project.extPath}/config.xml" token="{created}" value="${created.TODAY} ${created.TSTAMP}" />
     </target>
 
