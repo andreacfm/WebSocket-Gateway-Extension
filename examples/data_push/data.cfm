@@ -1,17 +1,13 @@
 <cfsetting requesttimeout="120">
-<cfscript>
-    param name ="gateway" default="stocks";
-    stocks = ['GOOG', 'APPL', 'MSFT', 'AMZN'];
-
-    while (true){
-        message = {};
-        for(item in stocks) {
-            message[item] = randRange(1, 5);
-        }
-        data = {message : serializeJSON(message)}
-        sendGatewayMessage(gateway, data);
-        sleep(2000);
-        writeOutput('- Pushing #data.toString()# to #gateway#</br>');
-        flush;
-    }
-</cfscript>
+<cfset stocks = ['GOOG', 'APPL', 'MSFT', 'AMZN']>
+<cfloop from="1" to="50" index="i">
+	<cfset message = {}>
+	<cfloop array="#stocks#" index="stock">
+		<cfset message[stock] = randRange(1, 5)>
+	</cfloop>
+    <cfset data = {message : serializeJSON(message)}>
+    <cfset sendGatewayMessage("stocks", data)>
+    <cfoutput>- Pushing #data.toString()# to stocks</br></cfoutput>
+    <cfflush/>
+    <cfset sleep(2000)>
+</cfloop>

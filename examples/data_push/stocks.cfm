@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Railo Websockects Demo Apps - Data Push</title>
-    <script src="jquery-1.4.2.js" type="text/javascript"></script>
+    <script src="../assets/jquery-1.4.2.js" type="text/javascript"></script>
     <script type="text/javascript">
         var ws;
         $(document).ready(function(){
@@ -24,7 +24,7 @@
             }
         })
     </script>
-    <link href="assets/style.css" rel="stylesheet">
+    <link href="../assets/style.css" rel="stylesheet">
 </head>
 <body>
 
