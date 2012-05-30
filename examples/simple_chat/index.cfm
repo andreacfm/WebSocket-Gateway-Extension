@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Railo Websockects Demo Apps - Simple Chat</title>
-    <link href="assets/style.css" rel="stylesheet" type="text/css">
+    <link href="../assets/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 

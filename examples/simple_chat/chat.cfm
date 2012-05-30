@@ -2,10 +2,10 @@
 <html>
 <head>
     <title>Railo Websockects Demo Apps - Simple Chat</title>
-    <script src="assets/jquery-1.4.2.js" type="text/javascript"></script>
-    <script src="assets/simple_chat.js" type="text/javascript"></script>
-    <link href="assets/style.css" rel="stylesheet" type="text/css">
-    <link href="assets/simple_chat.css" rel="stylesheet" type="text/css">
+    <script src="../assets/jquery-1.4.2.js" type="text/javascript"></script>
+    <script src="../assets/simple_chat.js" type="text/javascript"></script>
+    <link href="../assets/style.css" rel="stylesheet" type="text/css">
+    <link href="../assets/simple_chat.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
