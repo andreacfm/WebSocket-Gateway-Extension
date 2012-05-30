@@ -21,7 +21,7 @@
     </tr>
 </table>
 
-<input type="hidden" id="server_url" value="ws://localhost:10125"/>
+<input type="hidden" id="server_url" value="ws://<cfoutput>#cgi.server_name#</cfoutput>:10125"/>
 
 <table width="600">
     <tr>
