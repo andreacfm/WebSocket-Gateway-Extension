@@ -2,11 +2,17 @@
 
 For docs about the gateway visit this "wiki page":http://wiki.getrailo.org/wiki/Extensions:WebSockets_Gateway.
 
+#### Changes
+* verbose config is now called debug
+* removed config for methods names that handle events in the listener.
+* listener onOpen and onClose just get the connection as arguments
+* no message is sent if connection isAuthenticated() is false
 
 #### Todo
 
-##### Channels
+* check if listener has implemented the conventional method before attempt to call
 
+##### Channels
 * Server must be able to manage more that one channel.
 * any connection will be added to a "default" channel that store any opened connection.
 * add ability to *subscribe* to a specific channel
