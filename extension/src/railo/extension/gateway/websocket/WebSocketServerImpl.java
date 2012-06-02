@@ -38,7 +38,6 @@ public class WebSocketServerImpl extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         WebSocketImpl ws = new WebSocketImpl(conn, ON_CLIENT_MESSAGE, message);
         _connectionsStack.add(ws);
-
     }
 
 

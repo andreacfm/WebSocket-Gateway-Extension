@@ -5,7 +5,7 @@ component extends="mxunit.framework.TestCase"{
     import "railo.extension.gateway.websockets.*"
 
     public function setUp(){
-        gateway = base_gateway(listener = mock("railo.extension.gateway.WebSocketListener"));
+        gateway = base_gateway();
         handleFactory = new HandlerFactory(gateway);
     }
 
@@ -25,14 +25,6 @@ component extends="mxunit.framework.TestCase"{
         var conn = mock();
         conn.getType().returns("OnClientClose");
         assertIsTypeOf(handleFactory.getHandler(conn), "railo.extension.gateway.websockets.OnClientCloseHandler");
-    }
-
-    public function test_on_client_open_should_invoke_the_listener(){
-        var conn = mock();
-        conn.getType().returns("OnClientOpen");
-        conn.getData().returns({message : "my message"})
-        gateway.handle(conn);
-        gateway.getListener().verifyOnce().onClientOpen();
     }
 
 }

@@ -1,7 +1,8 @@
 component extends="Handler"{
 
-    public void function handle(conn){
-        writelog(text="Handling OnClientClose", type="information", file="websocket");
+    public void function handle(connection){
+        var listener = gateway.getListener();
+        listener.onClientClose(connection);
     }
 
 }

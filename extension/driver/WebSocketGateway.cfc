@@ -2,11 +2,7 @@
 
     <cfset fields=array(
 		field("Server Port","port","10125",true,"Port of the websocket server","text"),
-		field("Verbose","verbose","false",true,"Enable verbose logging","radio","true,false"),
-		group("CFC Listener Function Defintion","Definitation for the CFC Listener Functions, when empty no listener is called",3),
-		field("ClientOpen","onClientOpen","onClientOpen",false,"called when a client open a connection","text"),
-		field("Message","onMessage","onMessage",false,"called when a client send a new message","text"),
-		field("ClientClose","onClientClose","onClientClose",false,"called when the client close the connection","text")
+		field("Debug","debug","false",true,"Enable debug logging","radio","true,false")
 	)>
 
 	<cffunction name="getClass" returntype="string">
