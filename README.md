@@ -11,6 +11,7 @@ For docs about the gateway visit this "wiki page":http://wiki.getrailo.org/wiki/
 #### Todo
 
 * check if listener has implemented the conventional method before attempt to call
+* give a client id to the WebSocketImpl istances
 
 ##### Channels
 * Server must be able to manage more that one channel.
@@ -28,5 +29,7 @@ For docs about the gateway visit this "wiki page":http://wiki.getrailo.org/wiki/
     {"channel" : "channel_name", message : optional message to be sent to the subscribed channel}
 
 * Server should allow implicit channels creation? Or it should refuse subcribtion to a not authorized channel?
+
+* try to give support to [cf10 implementation](http://help.adobe.com/en_US/ColdFusion/10.0/Developing/WSe61e35da8d318518767eb3aa135858633ee-7ffc.html)
 
 
