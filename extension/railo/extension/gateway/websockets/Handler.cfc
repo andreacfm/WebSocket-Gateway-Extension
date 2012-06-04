@@ -1,9 +1,9 @@
-component{
+component accessors="true"{
 
     property name="gateway";
 
     public function init(gateway){
-        variables.gateway = gateway;
+        setGateway(gateway);
         return this;
     }
 

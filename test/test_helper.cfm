@@ -1,7 +1,8 @@
 <cfscript>
 import "railo.extension.gateway.*";
+mockBox = createObject("component","mockbox.system.testing.MockBox").init();
 
-function base_config(){
+ function base_config(){
     return {onClientOpen : "onClientOpen", onClientClose : "onClientClose", onMessage : "onMessage", debug : true};
 }
 
