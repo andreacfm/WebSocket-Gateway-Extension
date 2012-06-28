@@ -79,6 +79,13 @@
 		start();
 	}
 
+    /**
+    Handle the incoming connection.
+    In case of Open or Close connection return an empty struct cause no message will need to be sent.
+    In case of OnMessage send to the listener a new {} containing the connection, the message and the channel.
+    @conn connection object
+    return the data struct after being processed by the listener
+    */
     public function handle(conn){
         var handler = variables.handlerFactory.getHandler(conn);
         var data = { connection : conn, message : conn.getMessage() }
