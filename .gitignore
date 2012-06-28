@@ -13,6 +13,6 @@
 *.iml
 /.idea
 /mxunit
-
+/mockbox
 
 .externalToolBuilders/BuildExtension.launch

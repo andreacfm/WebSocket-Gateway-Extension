@@ -27,18 +27,15 @@
 
 
             while(state eq 'running'){
-                var conns = getServer().getConnectionsStack();
-                var it = conns.iterator();
-                while(it.hasNext()){
-                    var conn = it.next();
+                var conn = variables.server.getLast();
+                if(not isNull(conn)){
                     var d = {};
                     d.conn = conn;
                     d.webSocketServerAction = conn.getType();
                     d.message = conn.getMessage();
                     sendMessage(d);
-                    it.remove();
                 }
-                sleep(200);
+                sleep(2);
             }
 
         }
