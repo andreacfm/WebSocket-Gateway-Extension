@@ -14,5 +14,6 @@
 /.idea
 /mxunit
 /mockbox
+/ext
 
 .externalToolBuilders/BuildExtension.launch
