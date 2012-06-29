@@ -6,9 +6,8 @@ import org.java_websocket.handshake.ClientHandshake;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class WebSocketServerImpl extends WebSocketServer {
 
@@ -17,12 +16,10 @@ public class WebSocketServerImpl extends WebSocketServer {
     public static final String ON_CLIENT_ClOSE = "OnClientClose";
     public static final String ON_CLIENT_MESSAGE = "OnMessage";
 
-    private String _gatewayID;
-    private ArrayList _connectionsStack = new ArrayList();
+    private LinkedBlockingDeque<WebSocketImpl> _connectionsStack = new LinkedBlockingDeque<WebSocketImpl>();
 
     public WebSocketServerImpl(String port, String id) {
         super(new InetSocketAddress(Integer.parseInt(port)));
-        _gatewayID = id;
     }
 
     public void onOpen(WebSocket conn, ClientHandshake clientHandshake) {
@@ -91,8 +88,12 @@ public class WebSocketServerImpl extends WebSocketServer {
     /**
      * @return the actual connections stack
      */
-    public ArrayList getConnectionsStack() {
+    public Deque getConnectionsStack() {
         return _connectionsStack;
+    }
+
+    public WebSocketImpl getLast(){
+        return _connectionsStack.poll();
     }
 
 }

@@ -4,7 +4,6 @@
 /extension/bin
 /extension/lib
 /extension/config.xml
-/dummy/
 
 #extensions
 *.project
@@ -15,6 +14,5 @@
 /.idea
 /mxunit
 /mockbox
-
 
 .externalToolBuilders/BuildExtension.launch
