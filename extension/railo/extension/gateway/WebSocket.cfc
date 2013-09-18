@@ -1,4 +1,4 @@
-﻿﻿component accessors=true{
+﻿component accessors=true{
 
     import "railo.extension.gateway.websockets.*";
 
@@ -11,7 +11,6 @@
     	variables.id=id;
         variables.config=config;
         variables.listener=listener;
-        variables.handlerFactory = new HandlerFactory(this);
 
         this.log("WebSocket Gateway [#arguments.id#] initialized");
 
@@ -31,14 +30,11 @@
             this.log("Started websocket server on port #variables.config.port#");
 
             while(state eq 'running'){
-                var conns = getServer().getConnectionsStack();
-                var it = conns.iterator();
-                while(it.hasNext()){
-                    var conn = it.next();
-                    handleConnection(conn);
-                    it.remove();
-                }
-                sleep(200);
+                var conn = variables.server.getLast();
+                if(not isNull(conn)){
+                   handleConnection(conn);
+                 }
+                sleep(2);
             }
 
         }
@@ -79,25 +75,6 @@
 		start();
 	}
 
-    /**
-    Handle the incoming connection.
-    In case of Open or Close connection return an empty struct cause no message will need to be sent.
-    In case of OnMessage send to the listener a new {} containing the connection, the message and the channel.
-    @conn connection object
-    return the data struct after being processed by the listener
-    */
-    public function handle(conn){
-        var handler = variables.handlerFactory.getHandler(conn);
-        var data = { connection : conn, message : conn.getMessage() }
-        if(conn.getType() == "OnMessage"){
-            handler.handle(data);
-            return data;
-        }else{
-            handler.handle(conn);
-            return {};
-        }
-    }
-
     public any function getHelper(){
 	}
 
@@ -129,39 +106,73 @@
         }
     }
 
+
+   /**
+    Handle the incoming connection.
+    In case of Open or Close connection return an empty struct cause no message will need to be sent.
+    In case of OnMessage send to the listener a new {} containing the connection, the message and the channel.
+    @conn connection object
+    return the data struct after being processed by the listener
+    */
+    public function handle(conn){
+        var data = { connection : conn, message : conn.getMessage() }
+        if(conn.getType() == "OnMessage"){
+            this.onMessage(data);
+            return data;
+        }else{
+            this[conn.getType()](conn)
+            return {};
+        }
+    }
+
     public String function sendMessage(Struct data){
+        if(not structKeyExists(data, "channel")){
+            data.channel = "default";
+        }
 
         try{
-            /*
-            * send only to the provided connections
-            */
-            if(structkeyExists(data,'connections') and isArray(data.connections)){
-
-                variables.server.send(data.connections,data.message);
-
+            if(structkeyExists(data,'target') and isArray(data.target)){
+                variables.server.send(data.target, data.message);
+                return;
             }
-            else if(not structKeyExists(data,'conn') and not structKeyExists(data,"webSocketServerAction")){
 
-                /*
-                * No set of connections exists. If also no webSocketServerAction and conn exists means invocation comes from sengGatewayMessage
-                * so send to all.
-                */
-                 variables.server.sendToAll(data.message);
-
-            }else{
-
-                /*
-                * By deafult send to all except the connection that sent the message
-                */
-                variables.server.sendToAllExcept(data.conn,data.message);
-
+            if(not structKeyExists(data,'conn')){
+                 variables.server.sendToChannel(data.message, data.channel);
+                 return;
             }
+
+            variables.server.sendToChannel(data.message, data.channel, data.conn);
 
         }
         catch(Any e){
             this.log(e.message,"error");
             rethrow;
         }
+    }
+
+    private function onClientOpen(connection){
+        var listener = getListener();
+        if(structKeyExists(listener, "onClientOpen")){
+            listener.onClientOpen(connection);
+        }
+    }
+
+    private function  onClientClose(connection){
+        var listener = getListener();
+        if(structKeyExists(listener, "onClientClose")){
+            listener.onClientClose(connection);
+        }
+    }
+
+    private function onMessage(data){
+        var listener = getListener();
+        if(structKeyExists(listener, "onMessage")){
+            listener.onMessage(data);
+            if(getConfig().debug){
+                this.log("Handling Message -- #data.connection.getMessage()#");
+            }
+        }
+
     }
 
 }

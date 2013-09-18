@@ -15,6 +15,7 @@ public class WebSocketServerImpl extends WebSocketServer {
     public static final String ON_CLIENT_OPEN = "OnClientOpen";
     public static final String ON_CLIENT_ClOSE = "OnClientClose";
     public static final String ON_CLIENT_MESSAGE = "OnMessage";
+    public static final String DEFAULT_CHANNEL = "default";
 
     private LinkedBlockingDeque<WebSocketImpl> _connectionsStack = new LinkedBlockingDeque<WebSocketImpl>();
 
@@ -42,20 +43,13 @@ public class WebSocketServerImpl extends WebSocketServer {
 
     }
 
-    public void sendToAll(String text) {
-        Set<WebSocket> con = connections();
-        synchronized (con) {
-            for (WebSocket c : con) {
-                try {
-                    c.send(text);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+    public void sendToChannel(String message, String channel) throws IOException {
+        if (channel.equals(DEFAULT_CHANNEL)) {
+            send((ArrayList) connections(), message, null);
         }
     }
 
-    public void sendToAllExcept(WebSocketImpl webSocket, String message) throws IOException {
+    public void sendToChannel(String message, String channel, WebSocket conn) throws IOException {
         Set<WebSocket> con = connections();
         synchronized (con) {
             for (WebSocket c : con) {
@@ -72,17 +66,16 @@ public class WebSocketServerImpl extends WebSocketServer {
 
     }
 
-    public void send(ArrayList conns, String message) throws IOException {
-        Iterator it = conns.iterator();
-        while (it.hasNext()) {
-            WebSocketImpl ws = (WebSocketImpl) it.next();
+    public void send(ArrayList<WebSocket> conns, String message, WebSocket except) throws IOException {
+        synchronized (conns) {
             try {
-                ws.getWebSocket().send(message);
+                for (WebSocket c : conns) {
+                    c.send(message);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     /**
@@ -92,7 +85,7 @@ public class WebSocketServerImpl extends WebSocketServer {
         return _connectionsStack;
     }
 
-    public WebSocketImpl getLast(){
+    public WebSocketImpl getLast() {
         return _connectionsStack.poll();
     }
 
