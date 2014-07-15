@@ -78,7 +78,7 @@ public class WebSocketServerImpl extends WebSocketServer {
         while (it.hasNext()) {
             WebSocketImpl ws = (WebSocketImpl) it.next();
             try {
-                ws.getWebSocket().send(ws.getMessage());
+                ws.getWebSocket().send(text);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
